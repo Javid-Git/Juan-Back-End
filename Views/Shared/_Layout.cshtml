@@ -53,9 +53,7 @@
                             <li class="menu-item-has-children">
                                 <a href="index.html">Home</a>
                             </li>
-                            <li class="menu-item-has-children ">
-                                <a href="shop-list-left-sidebar.html">shop</a>
-                            </li>
+                            <li><a href="shop-list-left-sidebar.html">shop</a></li>
                             <li class="menu-item-has-children ">
                                 <a href="#">Blog</a>
                                 <ul class="dropdown">
@@ -132,9 +130,7 @@
         </div>
     </aside>
     <!-- off-canvas menu end -->
-
-    @RenderBody();
-
+    @RenderBody()
     @await Component.InvokeAsync("Footer")
 
     <!-- offcanvas search form start -->
