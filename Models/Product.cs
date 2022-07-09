@@ -19,12 +19,21 @@ namespace Juan.Models
         public double Price { get; set; }
         [Required]
         public double DiscountedPrice { get; set; }
+        [Range(0, int.MaxValue)]
+        public int Count { get; set; }
+        public string Describtion { get; set; }
         public bool IsTopSeller { get; set; }
+        public bool IsAvailable { get; set; }
         public IEnumerable<Photo> Photos { get; set; }
         public IEnumerable<ProductSize> ProductSizes { get; set; }
         public IEnumerable<ProductColor> ProductColors { get; set; }
 
         public int CategoryId { get; set; }
         public Category Categories { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsUpdated { get; set; }
+        public Nullable<DateTime> CreatedAt { get; set; }
+        public Nullable<DateTime> DeletedAt { get; set; }
+        public Nullable<DateTime> UpdatedAt { get; set; }
     }
 }

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Juan.DAL;
+using Juan.Models;
+using Juan.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +12,20 @@ namespace Juan.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _context;
+        public HomeController(AppDbContext context)
         {
-            return View();
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            List<Product> products = await _context.Products.ToListAsync();
+            HomeVM homeVM = new HomeVM
+            {
+                Products = products,
+                Topsellers = products.Where(p => p.IsTopSeller).ToList()
+            };
+            return View(homeVM);
         }
     }
 }

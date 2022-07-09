@@ -9,6 +9,6 @@ namespace Juan.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<ProductSize> ProductSizes { get; set; }
+        public IEnumerable<ProductColor> ProductColors { get; set; }
     }
 }
