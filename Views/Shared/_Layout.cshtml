@@ -12,6 +12,8 @@
     <link rel="shortcut icon" href="~/assets/img/favicon.ico" type="image/x-icon" />
     <!--=== All Plugins CSS ===-->
     <link href="~/assets/css/plugins.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/assets/css/plugins/slick.css">
+
     <!--=== All Vendor CSS ===-->
     <link href="~/assets/css/vendor.css" rel="stylesheet">
     <!--=== Main Style CSS ===-->
@@ -40,7 +42,11 @@
                 <!-- search box start -->
                 <div class="search-box-offcanvas">
                     <form>
-                        <input type="text" placeholder="Search Here...">
+                        <input type="text" data-url="http://localhost:16917/product/Search" class="searchinput" placeholder="Search Here...">
+                        <div class="search-body" style="position:absolute; z-index:999;background-color:white; width:95%; top:250px">
+                            <ul class="list-group">
+                            </ul>
+                        </div>
                         <button class="search-btn"><i class="ion-ios-search-strong"></i></button>
                     </form>
                 </div>
@@ -51,9 +57,9 @@
                     <nav>
                         <ul class="mobile-menu">
                             <li class="menu-item-has-children">
-                                <a href="index.html">Home</a>
+                                <a asp-controller="home" asp-action="index">Home</a>
                             </li>
-                            <li><a href="shop-list-left-sidebar.html">shop</a></li>
+                            <li><a asp-controller="product" asp-action="index">shop</a></li>
                             <li class="menu-item-has-children ">
                                 <a href="#">Blog</a>
                                 <ul class="dropdown">
@@ -131,18 +137,31 @@
     </aside>
     <!-- off-canvas menu end -->
     @RenderBody()
+    <!-- Quick view modal start -->
+    <div class="modal" id="quick_view">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+    <!-- Quick view modal end -->
     @await Component.InvokeAsync("Footer")
 
     <!-- offcanvas search form start -->
-    <div class="offcanvas-search-wrapper">
+    <div class="offcanvas-search-wrapper" style="overflow:hidden">
         <div class="offcanvas-search-inner">
             <div class="offcanvas-close">
                 <i class="ion-android-close"></i>
             </div>
             <div class="container">
-                <div class="offcanvas-search-box">
+                <div class="offcanvas-search-box" style="overflow-y:auto">
                     <form class="d-flex bdr-bottom w-100">
-                        <input type="text" placeholder="Search entire storage here...">
+                        <input type="text" data-url="http://localhost:16917/product/Search" class="searchinput" placeholder="Search Here...">
+                        <div class="search-body" style="position:absolute; z-index:999;background-color:white; width:95%; top:400px">
+                            <ul class="list-group" >
+                            </ul>
+                        </div>
                         <button class="search-btn"><i class="ion-ios-search-strong"></i>search</button>
                     </form>
                 </div>
@@ -238,8 +257,11 @@
     <script src="~/assets/js/vendor.js"></script>
     <!--=== All Plugins Js ===-->
     <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/plugins/slick.min.js"></script>
+
     <!--=== Active Js ===-->
     <script src="~/assets/js/active.js"></script>
+    <script src="~/assets/js/custom.js"></script>
 </body>
 
 

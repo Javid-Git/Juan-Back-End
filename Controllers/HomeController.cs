@@ -27,5 +27,19 @@ namespace Juan.Controllers
             };
             return View(homeVM);
         }
+        public async Task<IActionResult> ModalView(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_ModalViewPartial", product);
+        }
     }
 }

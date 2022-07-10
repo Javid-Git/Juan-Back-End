@@ -51,10 +51,16 @@ h1, h2, h3, h4, h5, h6 {
   color: #333333;
   margin-bottom: 0;
   font-family: "Montserrat", sans-serif; }
-
+.offcanvas-search-box{
+    overflow-y:scroll
+}
+.offcanvas-search-box::-webkit-scrollbar {
+    display: none !important;
+}
 ul {
-  margin: 0;
-  padding: 0; }
+    margin: 0;
+    padding: 0;
+}
   ul li {
     list-style: none; }
 

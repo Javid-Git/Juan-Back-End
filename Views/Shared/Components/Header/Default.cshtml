@@ -44,7 +44,7 @@
                     <!-- start logo area -->
                     <div class="col-lg-2">
                         <div class="logo">
-                            <a href="index.html">
+                            <a asp-controller="home" asp-action="index">
                                 <img src="~/assets/img/logo/logo.png" alt="">
                             </a>
                         </div>
@@ -58,10 +58,10 @@
                                 <nav class="desktop-menu">
                                     <ul>
                                         <li class="active">
-                                            <a href="index.html">Home </i></a>
+                                            <a asp-controller="home" asp-action="index">Home </i></a>
 
                                         </li>
-                                        <li><a href="shop-list-left-sidebar.html">shop</a></li>
+                                        <li><a asp-controller="product" asp-action="index">shop</a></li>
                                         <li><a href="blog-left-sidebar.html">blog</a></li>
                                         <li><a href="contact-us.html">Contact us</a></li>
                                     </ul>
