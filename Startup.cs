@@ -1,4 +1,6 @@
 using Juan.DAL;
+using Juan.Interfaces;
+using Juan.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,9 @@ namespace Juan
             services.AddRazorPages();
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("default")));
+            services.AddScoped<ILayoutService, LayoutService>();
+            services.AddHttpContextAccessor();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

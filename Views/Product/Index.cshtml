@@ -150,7 +150,10 @@
                             </div>
                         </div>
                         <!-- shop product top wrap end -->
-                        @await Html.PartialAsync("_ShopIndexPartial", Model.Products) 
+                        <div class="sort-content">
+                            @await Html.PartialAsync("_ShopIndexPartial", Model.Products)
+
+                        </div>
                         <!-- start pagination area -->
                         <div class="paginatoin-area text-center mt-45">
                             <ul class="pagination-box">

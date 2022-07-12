@@ -1,8 +1,10 @@
 ﻿using Juan.DAL;
 using Juan.Models;
 using Juan.ViewModels;
+using Juan.ViewModels.BasketViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +22,26 @@ namespace Juan.Controllers
         public async Task<IActionResult> Index()
         {
             List<Product> products = await _context.Products.ToListAsync();
+            string basket = HttpContext.Request.Cookies["basket"];
+            List<BasketVM> basketVMs = null;
+
+            if (!string.IsNullOrWhiteSpace(basket))
+            {
+                basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            }
+            else
+            {
+                basketVMs = new List<BasketVM>();
+            }
+
+            basket = JsonConvert.SerializeObject(basketVMs);
+            HttpContext.Response.Cookies.Append("basket", basket);
+
             HomeVM homeVM = new HomeVM
             {
                 Products = products,
-                Topsellers = products.Where(p => p.IsTopSeller).ToList()
+                Topsellers = products.Where(p => p.IsTopSeller).ToList(),
+                BasketVMs = basketVMs
             };
             return View(homeVM);
         }

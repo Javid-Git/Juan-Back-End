@@ -1,13 +1,13 @@
 ﻿@model List<Product>
 <!-- product item list start -->
-<div class="shop-product-wrap list-view row mbn-50 sort-content">
+<div class="shop-product-wrap list-view row mbn-50 ">
     @foreach (Product product in Model)
     {
         <div class="col-lg-4 col-sm-6">
             <!-- product grid item start -->
             <div class="product-item mb-53">
                 <div class="product-thumb">
-                    <a href="product-details.html">
+                    <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
                         <img src="assets/img/product/@product.MainImage" alt="">
                     </a>
                 </div>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="product-action-link">
                         <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                        <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
+                        <a asp-controller="basket" asp-action="addtobasket" asp-route-id="@product.Id" class="addtobasket" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
                         <a class="modaldetail" asp-controller="product" asp-action="modalview" asp-route-id="@product.Id" data-toggle="modal" data-target="#quick_view">
                             <span data-toggle="tooltip"
                                   title="Quick View"><i class="ion-ios-eye-outline"></i></span>
@@ -41,7 +41,7 @@
             <div class="product-list-item mb-30">
 
                 <div class="product-thumb">
-                    <a href="product-details.html">
+                    <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
                         <img src="assets/img/product/@product.MainImage" alt="product thumb">
                     </a>
                 </div>
@@ -65,7 +65,7 @@
                     </p>
                     <div class="product-link-2 position-static">
                         <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                        <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
+                        <a asp-controller="basket" asp-action="addtobasket" asp-route-id="@product.Id" class="addtobasket" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
                         <a asp-controller="product" asp-action="modalview" asp-route-id="@product.Id" data-toggle="modal" class="modaldetail" data-target="#quick_view">
                             <span data-toggle="tooltip" title="Quick View"><i class="ion-ios-eye-outline"></i></span>
                         </a>

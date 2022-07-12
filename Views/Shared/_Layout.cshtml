@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Juan.Interfaces
+@inject ILayoutService layoutService
+
+@{
+    List<BasketVM> basketVMs = await layoutService.GetBasket();
+}
+<!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
 <!-- Mirrored from demo.hasthemes.com/juan-preview-v1/juan/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Mar 2021 22:36:22 GMT -->
@@ -29,7 +35,149 @@
 
 <body>
 
-    @await Component.InvokeAsync("Header")
+    <!-- Start Header Area -->
+    <header class="header-area">
+        <!-- main header start -->
+        <div class="main-header d-none d-lg-block">
+            <!-- header top start -->
+            <div class="header-top theme-bg">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <div class="welcome-message">
+                                <p>Welcome to Juan online store</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-right">
+                            <div class="header-top-settings">
+                                <ul class="nav align-items-center justify-content-end">
+                                    <li class="curreny-wrap">
+                                        $ Dollar (US)
+                                        <i class="fa fa-angle-down"></i>
+                                        <ul class="dropdown-list curreny-list">
+                                            <li><a href="#">$ usd</a></li>
+                                            <li><a href="#"> € EURO</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="language">
+                                        <img src="~/assets/img/icon/en.png" alt="flag"> English
+                                        <i class="fa fa-angle-down"></i>
+                                        <ul class="dropdown-list">
+                                            <li><a href="#"><img src="~/assets/img/icon/en.png" alt="flag"> english</a></li>
+                                            <li><a href="#"><img src="~/assets/img/icon/fr.png" alt="flag"> french</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- header top end -->
+            <!-- header middle area start -->
+            <div class="header-main-area sticky">
+                <div class="container">
+                    <div class="row align-items-center position-relative">
+                        <!-- start logo area -->
+                        <div class="col-lg-2">
+                            <div class="logo">
+                                <a asp-controller="home" asp-action="index">
+                                    <img src="~/assets/img/logo/logo.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <!-- start logo area -->
+                        <!-- main menu area start -->
+                        <div class="col-lg-8 position-static">
+                            <div class="main-menu-area">
+                                <div class="main-menu">
+                                    <!-- main menu navbar start -->
+                                    <nav class="desktop-menu">
+                                        <ul>
+                                            <li class="active">
+                                                <a asp-controller="home" asp-action="index">Home </i></a>
+
+                                            </li>
+                                            <li><a asp-controller="product" asp-action="index">shop</a></li>
+                                            <li><a asp-controller="blog" asp-action="index">blog</a></li>
+                                            <li><a asp-controller="contact" asp-action="index">Contact us</a></li>
+                                        </ul>
+                                    </nav>
+                                    <!-- main menu navbar end -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- main menu area end -->
+                        <!-- mini cart area start -->
+                        <div class="col-lg-2">
+                            <div class="header-configure-wrapper">
+                                <div class="header-configure-area">
+                                    <ul class="nav justify-content-end">
+                                        <li>
+                                            <a href="#" class="offcanvas-btn">
+                                                <i class="ion-ios-search-strong"></i>
+                                            </a>
+                                        </li>
+                                        <li class="user-hover">
+                                            <a href="#">
+                                                <i class="ion-ios-gear-outline"></i>
+                                            </a>
+                                            <ul class="dropdown-list">
+                                                <li><a href="login-register.html">login</a></li>
+                                                <li><a href="login-register.html">register</a></li>
+                                                <li><a href="my-account.html">my account</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="minicart-btn">
+                                                <i class="ion-bag"></i>
+                                                <div class="notification">@basketVMs.Count()</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- mini cart area end -->
+                    </div>
+                </div>
+            </div>
+            <!-- header middle area end -->
+        </div>
+        <!-- main header start -->
+        <!-- mobile header start -->
+        <div class="mobile-header d-lg-none d-md-block sticky">
+            <!--mobile header top start -->
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="mobile-main-header">
+                            <div class="mobile-logo">
+                                <a href="index.html">
+                                    <img src="~/assets/img/logo/logo.png" alt="Brand Logo">
+                                </a>
+                            </div>
+                            <div class="mobile-menu-toggler">
+                                <div class="mini-cart-wrap">
+                                    <a href="cart.html">
+                                        <i class="ion-bag"></i>
+                                    </a>
+                                </div>
+                                <div class="mobile-menu-btn">
+                                    <div class="off-canvas-btn">
+                                        <i class="ion-navicon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- mobile header top start -->
+        </div>
+        <!-- mobile header end -->
+    </header>
+    <!-- end Header Area -->
     <!-- off-canvas menu start -->
     <aside class="off-canvas-wrapper">
         <div class="off-canvas-overlay"></div>
@@ -60,19 +208,8 @@
                                 <a asp-controller="home" asp-action="index">Home</a>
                             </li>
                             <li><a asp-controller="product" asp-action="index">shop</a></li>
-                            <li class="menu-item-has-children ">
-                                <a href="#">Blog</a>
-                                <ul class="dropdown">
-                                    <li><a href="blog-left-sidebar.html">blog left sidebar</a></li>
-                                    <li><a href="blog-right-sidebar.html">blog right sidebar</a></li>
-                                    <li><a href="blog-grid-full-width.html">blog grid no sidebar</a></li>
-                                    <li><a href="blog-details.html">blog details</a></li>
-                                    <li><a href="blog-details-audio.html">blog details audio</a></li>
-                                    <li><a href="blog-details-video.html">blog details video</a></li>
-                                    <li><a href="blog-details-left-sidebar.html">blog details left sidebar</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="contact-us.html">Contact us</a></li>
+                            <li><a asp-controller="blog" asp-action="index">blog</a></li>
+                            <li><a asp-controller="contact" asp-action="index">Contact us</a></li>
                         </ul>
                     </nav>
                     <!-- mobile menu navigation end -->
@@ -159,7 +296,7 @@
                     <form class="d-flex bdr-bottom w-100">
                         <input type="text" data-url="http://localhost:16917/product/Search" class="searchinput" placeholder="Search Here...">
                         <div class="search-body" style="position:absolute; z-index:999;background-color:white; width:95%; top:400px">
-                            <ul class="list-group" >
+                            <ul class="list-group">
                             </ul>
                         </div>
                         <button class="search-btn"><i class="ion-ios-search-strong"></i>search</button>
@@ -170,83 +307,29 @@
     </div>
     <!-- offcanvas search form end -->
     <!-- offcanvas mini cart start -->
-    <div class="offcanvas-minicart-wrapper">
-        <div class="minicart-inner">
+
+    <div class="offcanvas-minicart-wrapper ">
+        <div class="minicart-inner ">
             <div class="offcanvas-overlay"></div>
             <div class="minicart-inner-content">
                 <div class="minicart-close">
                     <i class="ion-android-close"></i>
                 </div>
-                <div class="minicart-content-box">
-                    <div class="minicart-item-wrapper">
-                        <ul>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="~/assets/img/cart/cart-1.jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Flowers bouquet pink for all flower lovers</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$100.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="ion-android-close"></i></button>
-                            </li>
-                            <li class="minicart-item">
-                                <div class="minicart-thumb">
-                                    <a href="product-details.html">
-                                        <img src="~/assets/img/cart/cart-2.jpg" alt="product">
-                                    </a>
-                                </div>
-                                <div class="minicart-content">
-                                    <h3 class="product-name">
-                                        <a href="product-details.html">Jasmine flowers white for all flower lovers</a>
-                                    </h3>
-                                    <p>
-                                        <span class="cart-quantity">1 <strong>&times;</strong></span>
-                                        <span class="cart-price">$80.00</span>
-                                    </p>
-                                </div>
-                                <button class="minicart-remove"><i class="ion-android-close"></i></button>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="header-cart" style="height:100%">
+                    @await Html.PartialAsync("_AddToCartPartial", basketVMs)
 
-                    <div class="minicart-pricing-box">
-                        <ul>
-                            <li>
-                                <span>sub-total</span>
-                                <span><strong>$300.00</strong></span>
-                            </li>
-                            <li>
-                                <span>Eco Tax (-2.00)</span>
-                                <span><strong>$10.00</strong></span>
-                            </li>
-                            <li>
-                                <span>VAT (20%)</span>
-                                <span><strong>$60.00</strong></span>
-                            </li>
-                            <li class="total">
-                                <span>total</span>
-                                <span><strong>$370.00</strong></span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="minicart-button">
-                        <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
-                        <a href="cart.html"><i class="fa fa-share"></i> checkout</a>
-                    </div>
                 </div>
+
             </div>
+
+
         </div>
     </div>
     <!-- offcanvas mini cart end -->
+
+
+
+
     <!-- Scroll to top start -->
     <div class="scroll-top not-visible">
         <i class="fa fa-angle-up"></i>

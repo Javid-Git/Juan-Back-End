@@ -35,6 +35,10 @@
 		$("body").removeClass('fix');
 		$(".offcanvas-search-inner, .minicart-inner").removeClass('show')
 	})
+	$(document).on('click', '.minicart-close', function () {
+		$("body").removeClass('fix');
+		$(".minicart-inner").removeClass('show')
+	})
 
 	// nice select active start
 	$('select').niceSelect();

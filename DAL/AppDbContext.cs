@@ -21,5 +21,10 @@ namespace Juan.DAL
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<BlCategory> BlCategories { get; set; }
+        public DbSet<BlogBlCategory> BlogBlCategories { get; set; }
+        public DbSet<BlogTag> BlogTags { get; set; }
     }
 }

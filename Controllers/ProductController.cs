@@ -117,6 +117,19 @@ namespace Juan.Controllers
             
             return PartialView("_ShopIndexPartial", products);
         }
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            Product product = await _context.Products.Include(p=>p.Photos).FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
+            return View(product);
+        }
     }
 }
