@@ -94,7 +94,7 @@ namespace Juan.Areas.Manage.Controllers
                     ModelState.AddModelError("File", "The uploaded file should not exceed 200Kb ");
                     return View();
                 }
-                product.MainImage = await product.MainFormImage.CreateAsync(_env, "assets", "images", "mainimages");
+                product.MainImage = await product.MainFormImage.CreateAsync(_env, "assets", "img", "product");
 
             }
 
@@ -128,7 +128,7 @@ namespace Juan.Areas.Manage.Controllers
                             return View();
                         }
                         Photo photo = new Photo();
-                        photo.Image = await FileManager.CreateAsync(image, _env, "assets", "images", "detailimages"); ;
+                        photo.Image = await FileManager.CreateAsync(image, _env, "assets", "img", "details"); ;
                         photo.ProductId = product.Id;
                         await _context.AddAsync(photo);
                         _context.SaveChanges();
@@ -227,7 +227,7 @@ namespace Juan.Areas.Manage.Controllers
             if (product.MainFormImage != null)
             {
                 FileHelper.DeleteFile(_env, dbproduct.MainImage, "assets", "images", "mainimages");
-                dbproduct.MainImage = await product.MainFormImage.CreateAsync(_env, "assets", "images", "mainimages");
+                dbproduct.MainImage = await product.MainFormImage.CreateAsync(_env, "assets", "img", "product");
 
             };
 
@@ -236,7 +236,7 @@ namespace Juan.Areas.Manage.Controllers
                 List<Photo> photos = _context.Photos.Where(p => p.ProductId == product.Id).ToList();
                 foreach (Photo photo in photos)
                 {
-                    FileHelper.DeleteFile(_env, photo.Image, "assets", "images", "detailimages");
+                    FileHelper.DeleteFile(_env, photo.Image, "assets", "img", "details");
                     _context.Photos.Remove(photo);
                     _context.SaveChanges();
 
@@ -245,7 +245,7 @@ namespace Juan.Areas.Manage.Controllers
                 foreach (IFormFile image in product.DetailFormImages)
                 {
                     Photo photo = new Photo();
-                    photo.Image = await FileManager.CreateAsync(image, _env, "assets", "images", "detailimages"); ;
+                    photo.Image = await FileManager.CreateAsync(image, _env, "assets", "img", "details"); ;
                     photo.ProductId = product.Id;
                     //_context.Update(photo);
                     _context.SaveChanges();

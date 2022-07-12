@@ -13,7 +13,7 @@
                 </div>
                 <div class="product-content">
                     <h5 class="product-name">
-                        <a href="product-details.html">@product.Name</a>
+                        <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
                     </h5>
                     <div class="price-box">
                         @if (product.DiscountedPrice > 0)
@@ -47,7 +47,7 @@
                 </div>
                 <div class="product-content-list">
                     <h5 class="product-name">
-                        <a href="product-details.html">@product.Name</a>
+                        <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
                     </h5>
                     <div class="price-box">
                         @if (product.DiscountedPrice > 0)

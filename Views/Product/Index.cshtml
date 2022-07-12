@@ -154,9 +154,10 @@
                             @await Html.PartialAsync("_ShopIndexPartial", Model.Products)
 
                         </div>
+                        <br />
                         <!-- start pagination area -->
                         <div class="row justify-content-center">
-                            <ul class="pagination ">
+                            <ul class="pagination " >
                                 @if (Model.Products.HasPrev)
                                 {
                                     <li class="page-item"><a class="page-link" asp-controller="product" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="1">@("<<")</a></li>

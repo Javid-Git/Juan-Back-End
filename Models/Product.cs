@@ -14,7 +14,6 @@ namespace Juan.Models
         [Required]
         [StringLength(maximumLength: 255)]
         public string Name { get; set; }
-        [Required]
         [StringLength(maximumLength: 255)]
         public string MainImage { get; set; }
         [Required]
