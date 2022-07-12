@@ -65,13 +65,13 @@ namespace Juan.Areas.Manage.Controllers
             {
                 return BadRequest();
             }
-            //if ( product.MainFormImage == null || product.HoverFormImage == null)
-            //{
-            //    ModelState.AddModelError("File", "You should add an image");
-            //    return View();
+            if (product.MainFormImage == null )
+            {
+                ModelState.AddModelError("File", "You should add an image");
+                return View();
 
-            //}
-           
+            }
+
             //if (product == null || !await _context.Products.AnyAsync(b => b.Id == product.BrandId && !b.IsDeleted))
             //{
             //    ModelState.AddModelError("BrandId", "Not the right brand");

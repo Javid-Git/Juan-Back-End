@@ -8,7 +8,7 @@ namespace Juan.ViewModels.BlogViewModels
 {
     public class BlogVM
     {
-        public List<Blog> Blogs{ get; set; }
+        public PageNatedList<Blog> Blogs{ get; set; }
         public Blog Blog{ get; set; }
         public List<Tag> Tags{ get; set; }
         public List<BlogTag> BlogTags { get; set; }

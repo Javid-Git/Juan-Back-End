@@ -40,7 +40,7 @@
                                 <ul class="color-list">
                                     @foreach (Category category in Model.Categories)
                                     {
-                                        <li><a asp-controller="product" asp-action="sortbycategory" asp-route-id="@category.Id" class="sortlink">@category.Name <span>(@Model.Products.Where(p=>p.CategoryId == category.Id).ToList().Count())</span></a></li>
+                                        <li><a asp-controller="product" asp-action="sortbycategory" asp-route-id="@category.Id" class="sortlink">@category.Name <span>(@Model.ProductForCategory.Where(p=>p.CategoryId == category.Id).ToList().Count())</span></a></li>
 
                                     }
                                    
@@ -155,13 +155,26 @@
 
                         </div>
                         <!-- start pagination area -->
-                        <div class="paginatoin-area text-center mt-45">
-                            <ul class="pagination-box">
-                                <li><a class="Previous" href="#"><i class="ion-ios-arrow-left"></i></a></li>
-                                <li class="active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a class="Next" href="#"><i class="ion-ios-arrow-right"></i></a></li>
+                        <div class="row justify-content-center">
+                            <ul class="pagination ">
+                                @if (Model.Products.HasPrev)
+                                {
+                                    <li class="page-item"><a class="page-link" asp-controller="product" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="1">@("<<")</a></li>
+                                    <li class="page-item"><a class="page-link" asp-controller="product" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@(Model.Products.Page-1)">@("<")</a></li>
+
+                                }
+
+                                @for (int i = 1; i <= Model.Products.PageCount; i++)
+                                {
+                                    <li class="page-item"><a class="page-link" asp-controller="product" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@i">@i</a></li>
+
+                                }
+                                @if (Model.Products.HasNext)
+                                {
+                                    <li class="page-item"><a class="page-link" asp-controller="product" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@(Model.Products.Page+1)">@(">")</a></li>
+                                    <li class="page-item"><a class="page-link" asp-controller="product" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@Model.Products.PageCount">@(">>")</a></li>
+                                }
+
                             </ul>
                         </div>
                         <!-- end pagination area -->

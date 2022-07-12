@@ -1,5 +1,6 @@
 ﻿using Juan.DAL;
 using Juan.Models;
+using Juan.ViewModels;
 using Juan.ViewModels.BlogViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,17 +18,18 @@ namespace Juan.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page=1)
         {
-            List<Blog> blogs = await _context.Blogs.ToListAsync();
+            IQueryable<Blog> blogs =  _context.Blogs.AsQueryable();
             List<Tag> tags = await _context.Tags.ToListAsync();
             List<BlogTag> blogTags = await _context.BlogTags.ToListAsync();
             List<BlCategory> blCategories = await _context.BlCategories.ToListAsync();
             List<BlogBlCategory> blogBlCategories = await _context.BlogBlCategories.ToListAsync();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
 
             BlogVM blogVM = new BlogVM
             {
-                Blogs = blogs,
+                Blogs = PageNatedList<Blog>.Create(page, blogs, itemcount),
                 BlogTags = blogTags,
                 BlCategories = blCategories,
                 BlogBlCategories = blogBlCategories,
@@ -36,16 +38,18 @@ namespace Juan.Controllers
 
             return View(blogVM);
         }
-        public async Task<IActionResult> Detail(int? id)
+        public async Task<IActionResult> Detail(int? id, int page = 1)
         {
-            List<Blog> blogs = await _context.Blogs.Include(b=>b.BlogTags).ToListAsync();
+            IQueryable<Blog> blogs =  _context.Blogs.Include(b=>b.BlogTags).AsQueryable();
             List<Tag> tags = await _context.Tags.ToListAsync();
             List<BlCategory> blCategories = await _context.BlCategories.ToListAsync();
             List<BlogBlCategory> blogBlCategories = await _context.BlogBlCategories.ToListAsync();
             Blog blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+
             BlogVM blogVM = new BlogVM
             {
-                Blogs = blogs,
+                Blogs = PageNatedList<Blog>.Create(page, blogs, itemcount),
                 BlCategories = blCategories,
                 BlogBlCategories = blogBlCategories,
                 Tags = tags,

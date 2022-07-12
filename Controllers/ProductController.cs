@@ -1,5 +1,6 @@
 ﻿using Juan.DAL;
 using Juan.Models;
+using Juan.ViewModels;
 using Juan.ViewModels.ShopViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,17 +18,21 @@ namespace Juan.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            List<Product> products = await _context.Products.Include(p => p.ProductSizes).Include(p => p.ProductColors).ToListAsync();
+            IQueryable<Product> products = _context.Products.Include(p => p.ProductSizes).Include(p => p.ProductColors).AsQueryable();
+            List<Product> catproducts = await _context.Products.Include(p => p.ProductSizes).Include(p => p.ProductColors).ToListAsync();
             List<Size> sizes = await _context.Sizes.ToListAsync();
             List<Color> colors = await _context.Colors.ToListAsync();
             List<ProductColor> productColors = await _context.ProductColors.ToListAsync();
             List<ProductSize> productSizes = await _context.ProductSizes.ToListAsync();
             List<Category> categories = await _context.Categories.ToListAsync();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+
             ShopVM shopVM = new ShopVM
             {
-                Products = products,
+                Products = PageNatedList<Product>.Create(page, products, itemcount),
+                ProductForCategory = catproducts,
                 Sizes = sizes,
                 Colors = colors,
                 ProductSizes = productSizes,
@@ -57,7 +62,7 @@ namespace Juan.Controllers
             return PartialView("_SearchPartial", products);
 
         }
-        public async Task<IActionResult> SortByColor(int? id)
+        public async Task<IActionResult> SortByColor(int? id, int page=1)
         {
             if (id == null)
             {
@@ -65,6 +70,8 @@ namespace Juan.Controllers
             }
             List<ProductColor> productColors = await _context.ProductColors.Where(p => p.ColorId == id).ToListAsync();
             List<Product> products = new List<Product>();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+
             if (productColors == null)
             {
                 return NotFound();
@@ -78,9 +85,10 @@ namespace Juan.Controllers
             {
                 return NotFound();
             }
-            return PartialView("_ShopIndexPartial", products);
+            IQueryable<Product> query = products.AsQueryable();
+            return PartialView("_ShopIndexPartial", PageNatedList<Product>.Create(page, query, itemcount));
         }
-        public async Task<IActionResult> SortBySize(int? id)
+        public async Task<IActionResult> SortBySize(int? id, int page = 1)
         {
             if (id == null)
             {
@@ -88,6 +96,8 @@ namespace Juan.Controllers
             }
             List<ProductSize> productSizes= await _context.ProductSizes.Where(p => p.SizeId == id).ToListAsync();
             List<Product> products = new List<Product>();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+
             if (productSizes == null)
             {
                 return NotFound();
@@ -101,21 +111,26 @@ namespace Juan.Controllers
             {
                 return NotFound();
             }
-            return PartialView("_ShopIndexPartial", products);
+            IQueryable<Product> query = products.AsQueryable();
+
+            return PartialView("_ShopIndexPartial", PageNatedList<Product>.Create(page, query, itemcount));
         }
-        public async Task<IActionResult> SortByCategory(int? id)
+        public async Task<IActionResult> SortByCategory(int? id, int page = 1)
         {
             if (id == null)
             {
                 return BadRequest();
             }
             List<Product> products = await _context.Products.Where(p=>p.CategoryId == id).ToListAsync();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+
             if (products == null)
             {
                 return NotFound();
             }
-            
-            return PartialView("_ShopIndexPartial", products);
+            IQueryable<Product> query = products.AsQueryable();
+
+            return PartialView("_ShopIndexPartial", PageNatedList<Product>.Create(page, query, itemcount));
         }
         public async Task<IActionResult> Detail(int? id)
         {

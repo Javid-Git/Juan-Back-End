@@ -8,8 +8,9 @@ namespace Juan.ViewModels.ShopViewModels
 {
     public class ShopVM
     {
-        public List<Product> Products { get; set; }
+        public PageNatedList<Product> Products { get; set; }
         public List<Size> Sizes { get; set; }
+        public List<Product> ProductForCategory { get; set; }
         public List<Color> Colors { get; set; }
         public List<ProductColor> ProductColors { get; set; }
         public List<ProductSize> ProductSizes{ get; set; }

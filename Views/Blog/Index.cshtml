@@ -107,17 +107,28 @@
                        @await Html.PartialAsync("_BlogIndexPartial", Model.Blogs) 
 
                     </div>
-                    <!-- start pagination area -->
-                    <div class="paginatoin-area text-center">
-                        <ul class="pagination-box">
-                            <li><a class="Previous" href="#"><i class="ion-ios-arrow-left"></i></a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a class="Next" href="#"><i class="ion-ios-arrow-right"></i></a></li>
+                    <div class="row justify-content-center">
+                        <ul class="pagination ">
+                            @if (Model.Blogs.HasPrev)
+                            {
+                                <li class="page-item"><a class="page-link" asp-controller="blog" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="1">@("<<")</a></li>
+                                <li class="page-item"><a class="page-link" asp-controller="blog" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@(Model.Blogs.Page-1)">@("<")</a></li>
+
+                            }
+
+                            @for (int i = 1; i <= Model.Blogs.PageCount; i++)
+                            {
+                                <li class="page-item"><a class="page-link" asp-controller="blog" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@i">@i</a></li>
+
+                            }
+                            @if (Model.Blogs.HasNext)
+                            {
+                                <li class="page-item"><a class="page-link" asp-controller="blog" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@(Model.Blogs.Page+1)">@(">")</a></li>
+                                <li class="page-item"><a class="page-link" asp-controller="blog" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@Model.Blogs.PageCount">@(">>")</a></li>
+                            }
+
                         </ul>
                     </div>
-                    <!-- end pagination area -->
                 </div>
             </div>
         </div>
