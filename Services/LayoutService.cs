@@ -45,6 +45,7 @@ namespace Juan.Services
                 basketVM.Name = dbproduct.Name;
                 basketVM.Price = dbproduct.DiscountedPrice > 0 ? dbproduct.DiscountedPrice : dbproduct.Price;
                 basketVM.Image = dbproduct.MainImage;
+
             };
 
 

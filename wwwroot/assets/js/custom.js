@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('.modaldetail').click(function (e) {
+    $(document).on('click', '.modaldetail', function (e) {
         e.preventDefault();
         let url = $(this).attr('href');
 
@@ -28,20 +28,32 @@
                 focusOnSelect: true,
                 speed: 400,
             });
+            
         })
     })
-    $('.sortlink').click(function (e) {
+    $(document).on('click', '.sortlink', function (e) {
         e.preventDefault();
+
         let url = $(this).attr('href');
 
-        console.log(url);
-
-        fetch(url).then(response => {
-            return response.text();
-        }).then(data => {
-            $('.sort-content').html(data);
-        })
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                $('.sort-content').html(data);
+            });
     })
+    //$('.sortlink').click(function (e) {
+    //    e.preventDefault();
+    //    let url = $(this).attr('href');
+
+    //    console.log(url);
+
+    //    fetch(url).then(response => {
+    //        return response.text();
+    //    }).then(data => {
+    //        $('.sort-content').html(data);
+    //    })
+    //})
     $('.searchinput').keyup(function () {
         console.log("eee");
         let value = $(this).val();

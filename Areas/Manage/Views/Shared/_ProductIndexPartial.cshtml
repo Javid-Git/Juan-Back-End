@@ -1,0 +1,43 @@
+﻿@model PageNatedList<Product>
+<table class="table table-bordered table-striped ">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price $</th>
+            <th>Discounted Price $</th>
+            <th>Count</th>
+            <th>Description</th>
+            <th>Setting</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Product product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td><img style=" width:250px; height:150px " src="~/assets/images/mainimages/@product.MainImage" alt="Alternate Text" /></td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.DiscountedPrice</td>
+                <td>@product.Count</td>
+                <td>@product.Describtion</td>
+                <td>
+                    <a asp-area="manage" asp-controller="product" asp-action="update" asp-route-id="@product.Id" class="btn btn-warning">Update</a>
+                    @if (product.IsDeleted)
+                    {
+                        <a asp-area="manage" asp-controller="product" asp-action="restore" asp-route-id="@product.Id" asp-route-status="@ViewBag.Status" class="btn btn-info restoreBtn">Restore</a>
+
+                    }
+                    else
+                    {
+                        <a asp-area="manage" asp-controller="product" asp-action="delete" asp-route-id="@product.Id" asp-route-status="@ViewBag.Status" class="btn btn-danger deleteBtn">Delete</a>
+
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

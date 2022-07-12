@@ -94,7 +94,7 @@
                             <div class="blog-tag">
                                 @foreach (Tag tag in Model.Tags)
                                 {
-                                    <a asp-controller="product" asp-action="sortbytag" asp-route-id="@tag.Id">@tag.Name</a>
+                                    <a asp-controller="product" asp-action="sortbytag" asp-route-id="@tag.Id" class="sortlink">@tag.Name</a>
 
                                 }
                                
