@@ -226,7 +226,7 @@ namespace Juan.Areas.Manage.Controllers
 
             if (product.MainFormImage != null)
             {
-                FileHelper.DeleteFile(_env, dbproduct.MainImage, "assets", "images", "mainimages");
+                FileHelper.DeleteFile(_env, dbproduct.MainImage, "assets", "img", "product");
                 dbproduct.MainImage = await product.MainFormImage.CreateAsync(_env, "assets", "img", "product");
 
             };
@@ -247,7 +247,7 @@ namespace Juan.Areas.Manage.Controllers
                     Photo photo = new Photo();
                     photo.Image = await FileManager.CreateAsync(image, _env, "assets", "img", "details"); ;
                     photo.ProductId = product.Id;
-                    //_context.Update(photo);
+                    await _context.AddAsync(photo);
                     _context.SaveChanges();
 
                 }

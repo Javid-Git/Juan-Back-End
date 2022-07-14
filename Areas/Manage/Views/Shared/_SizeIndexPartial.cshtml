@@ -1,0 +1,34 @@
+﻿@model PageNatedList<Size>
+<table class="table table-bordered table-striped ">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Settings</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Size size in Model)
+        {
+            <tr>
+                <td>@size.Id</td>
+                <td>@size.Number</td>
+                
+                <td>
+                    <a asp-area="manage" asp-controller="size" asp-action="update" asp-route-id="@size.Id" class="btn btn-warning">Update</a>
+                    @if (size.IsDeleted)
+                    {
+                        <a asp-area="manage" asp-controller="size" asp-action="restore" asp-route-id="@size.Id" asp-route-status="@ViewBag.Status" class="btn btn-info restoreBtn">Restore</a>
+
+                    }
+                    else
+                    {
+                        <a asp-area="manage" asp-controller="size" asp-action="delete" asp-route-id="@size.Id" asp-route-status="@ViewBag.Status" class="btn btn-danger deleteBtn">Delete</a>
+
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

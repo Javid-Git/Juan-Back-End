@@ -1,0 +1,80 @@
+﻿@model PageNatedList<Size>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row mb-3 d-flex justify-content-between">
+    <div class="col-lg-2">
+        <h1>Products</h1>
+    </div>
+    <div class="col-lg-6">
+        <form>
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Brand Status</label>
+                    <select name="status" class="form-select" aria-label="Default select example">
+                        @if (ViewBag.Status == 0)
+                        {
+                            <option selected value="0">All</option>
+                        }
+                        else
+                        {
+                            <option value="0">All</option>
+                        }
+
+                        @if (ViewBag.Status == 1)
+                        {
+                            <option selected value="1">Deleted</option>
+                        }
+                        else
+                        {
+                            <option value="1">Deleted</option>
+                        }
+
+                        @if (ViewBag.Status == 2)
+                        {
+                            <option selected value="2">Active</option>
+                        }
+                        else
+                        {
+                            <option value="2">Active</option>
+                        }
+                    </select>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" type="submit">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-1">
+        <a class="btn btn-primary" asp-controller="size" asp-action="create" asp-area="manage">Create</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 tblContent">
+        @await Html.PartialAsync("_SizeIndexPartial", Model)
+    </div>
+</div>
+<div class="row justify-content-center">
+    <ul class="pagination ">
+        @if (Model.HasPrev)
+        {
+            <li class="page-item"><a class="page-link" asp-area="manage" asp-controller="size" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="1">@("<<")</a></li>
+            <li class="page-item"><a class="page-link" asp-area="manage" asp-controller="size" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@(Model.Page-1)">@("<")</a></li>
+
+        }
+
+        @for (int i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item"><a class="page-link" asp-area="manage" asp-controller="size" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@i">@i</a></li>
+
+        }
+        @if (Model.HasNext)
+        {
+            <li class="page-item"><a class="page-link" asp-area="manage" asp-controller="size" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@(Model.Page+1)">@(">")</a></li>
+            <li class="page-item"><a class="page-link" asp-area="manage" asp-controller="size" asp-action="index" asp-route-status="@ViewBag.Status" asp-route-page="@Model.PageCount">@(">>")</a></li>
+        }
+
+    </ul>
+</div>

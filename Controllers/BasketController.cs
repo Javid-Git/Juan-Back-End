@@ -64,7 +64,23 @@ namespace Juan.Controllers
             HttpContext.Response.Cookies.Append("basket", basket);
 
 
+            return Json(basketVMs.Count);
+            //return PartialView("_AddToCartPartial", await _basketProduct(basketVMs));
+        }
+        public async Task<IActionResult> OpenBasket()
+        {
+           
+            
+            string basket = HttpContext.Request.Cookies["basket"];
+            List<BasketVM> basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket); ;
 
+
+
+            basket = JsonConvert.SerializeObject(basketVMs);
+            HttpContext.Response.Cookies.Append("basket", basket);
+
+
+            //return Json(basketVMs.Count);
             return PartialView("_AddToCartPartial", await _basketProduct(basketVMs));
         }
         private async Task<List<BasketVM>> _basketProduct(List<BasketVM> basketVMs)
