@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ModalVM
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
@@ -9,7 +9,7 @@
             <div class="col-lg-5">
 
                 <div class="product-large-slider mb-20 quick-view-image">
-                    @foreach (Photo photo in Model.Photos)
+                    @foreach (Photo photo in Model.Product.Photos)
                     {
                         <div class="pro-large-img img-zoom">
                             <img src="~/assets/img/product/@photo.Image" alt="product thumb" />
@@ -17,7 +17,7 @@
                     }
                 </div>
                 <div class="pro-nav slick-row-5 quick-view-thumb">
-                    @foreach (Photo photo in Model.Photos)
+                    @foreach (Photo photo in Model.Product.Photos)
                     {
                         <div class="pro-nav-thumb"><img src="~/assets/img/product/@photo.Image" alt="" /></div>
 
@@ -26,31 +26,35 @@
             </div>
             <div class="col-lg-7">
                 <div class="product-details-des">
-                    <h3 class="pro-det-title">@Model.Name</h3>
+                    <h3 class="pro-det-title">@Model.Product.Name</h3>
                     <div class="pro-review">
                         <span><a href="#">1 Review(s)</a></span>
                     </div>
                     <div class="price-box">
-                        @if (Model.DiscountedPrice > 0)
+                        @if (Model.Product.DiscountedPrice > 0)
                         {
-                            <span class="price-regular">$@Model.DiscountedPrice</span>
-                            <span class="price-old"><del>$@Model.Price</del></span>
+                            <span class="price-regular">$@Model.Product.DiscountedPrice</span>
+                            <span class="price-old"><del>$@Model.Product.Price</del></span>
                         }
                         else
                         {
-                            <span class="price-old"><del>$@Model.Price</del></span>
+                            <span class="price-old"><del>$@Model.Product.Price</del></span>
                         }
                     </div>
-                    <p>@Model.Describtion</p>
+                    <p>@Model.Product.Describtion</p>
                     <div class="quantity-cart-box d-flex align-items-center mb-20">
                         <div class="quantity">
-                            <div class="pro-qty"><input type="text" value="1"></div>
+                            <div class="pro-qty">
+                                <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@Model.Product.Id" class="dec qtybtn subCount">-</a>
+                                <input type="text" value="@(Model.BasketVM != null? Model.BasketVM.SelectCount : 1)">
+                                <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@Model.Product.Id" class="dec qtybtn addCount">+</a>
+                            </div>
                         </div>
-                        <a href="cart.html" class="btn btn-default">Add To Cart</a>
+                        <a asp-controller="basket" asp-action="addtobasket" asp-route-id="@Model.Product.Id" class="btn btn-default addtobasket">Add To Cart</a>
                     </div>
                     <div class="availability mb-20">
                         <h5 class="cat-title">Availability:</h5>
-                        @if (Model.Count > 0)
+                        @if (Model.Product.Count > 0)
                         {
                             <span style="color:greenyellow">In Stock</span>
 

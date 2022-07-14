@@ -1,0 +1,72 @@
+﻿@model LoginVM
+@{
+    ViewData["Title"] = "Login";
+}
+<!-- main wrapper start -->
+<main>
+    <!-- breadcrumb area start -->
+    <div class="breadcrumb-area bg-img" data-bg="assets/img/banner/breadcrumb-banner.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb-wrap text-center">
+                        <nav aria-label="breadcrumb">
+                            <h1 class="breadcrumb-title">Login</h1>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Login-Register</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- breadcrumb area end -->
+    <!-- login register wrapper start -->
+    <div class="login-register-wrapper section-padding">
+        <div class="container">
+            <div class="member-area-from-wrap">
+                <div class="row">
+                    <!-- Login Content Start -->
+                    <div class="col-lg-6">
+                        <div class="login-reg-form-wrap">
+                            <h2>Sign In</h2>
+                            <div class="text text-danger" asp-validation-summary="ModelOnly"></div>
+                            <form method="post">
+                                <div class="single-input-item">
+                                    <input asp-for="Email" placeholder="Email or Username" required />
+                                    <span class="text text-danger" asp-validation-for="Email"></span>
+                                </div>
+                                <div class="single-input-item">
+                                    <input asp-for="Password" placeholder="Enter your Password" required />
+                                    <span class="text text-danger" asp-validation-for="Password"></span>
+                                </div>
+                                <div class="single-input-item">
+                                    <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
+                                        <div class="remember-meta">
+                                            <div class="custom-control custom-checkbox">
+                                                <input asp-for="RememberMe" class="custom-control-input" id="rememberMe">
+                                                <label class="custom-control-label" for="rememberMe">Remember Me</label>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="forget-pwd">Forget Password?</a>
+                                    </div>
+                                </div>
+                                <div class="single-input-item">
+                                    <button class="btn">Login</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Login Content End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- login register wrapper end -->
+</main>
+<!-- main wrapper end -->
+@section Script{
+    <partial name="_ValidationPartial" />
+}

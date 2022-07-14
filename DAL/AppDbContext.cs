@@ -1,4 +1,5 @@
 ﻿using Juan.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Juan.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -26,5 +27,6 @@ namespace Juan.DAL
         public DbSet<BlCategory> BlCategories { get; set; }
         public DbSet<BlogBlCategory> BlogBlCategories { get; set; }
         public DbSet<BlogTag> BlogTags { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
     }
 }

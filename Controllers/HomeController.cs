@@ -2,6 +2,7 @@
 using Juan.Models;
 using Juan.ViewModels;
 using Juan.ViewModels.BasketViewModel;
+using Juan.ViewModels.ModalViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -51,13 +52,70 @@ namespace Juan.Controllers
             {
                 return BadRequest();
             }
-            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
-            if (product == null)
+            string basket = HttpContext.Request.Cookies["basket"];
+            List<BasketVM> basketVMs = null;
+
+            if (!string.IsNullOrWhiteSpace(basket))
             {
-                return NotFound();
+                basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            }
+            else
+            {
+                basketVMs = new List<BasketVM>();
+            }
+            Product product = await _context.Products.Include(p => p.Photos).FirstOrDefaultAsync(p => p.Id == id);
+            if (basketVMs != null && basketVMs.Count != 0)
+            {
+                foreach (BasketVM basketitem in basketVMs)
+                {
+                    if (product == null)
+                    {
+                        return NotFound();
+                    }
+                    if (basketitem.ProdId == id)
+                    {
+                        ModalVM modalVM = new ModalVM
+                        {
+                            Product = product,
+                            BasketVM = basketitem
+
+                        };
+                        return PartialView("_ModalViewPartial", modalVM);
+
+                    }
+                    else
+                    {
+                        if (product == null)
+                        {
+                            return NotFound();
+                        }
+                        ModalVM modalVM = new ModalVM
+                        {
+                            Product = product,
+
+                        };
+                        return PartialView("_ModalViewPartial", modalVM);
+                    }
+                }
+
+            }
+            else
+            {
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                ModalVM modalVM = new ModalVM
+                {
+                    Product = product,
+
+                };
+                return PartialView("_ModalViewPartial", modalVM);
+
             }
 
-            return PartialView("_ModalViewPartial", product);
+            return NotFound();
+
         }
     }
 }

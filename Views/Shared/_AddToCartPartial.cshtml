@@ -6,23 +6,23 @@
         <ul>
             @foreach (BasketVM product in Model)
             {
-                <li class="minicart-item">
-                    <div class="minicart-thumb">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/@product.Image" alt="product">
-                        </a>
-                    </div>
-                    <div class="minicart-content">
-                        <h3 class="product-name">
-                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.ProdId">@product.Name</a>
-                        </h3>
-                        <p>
-                            <span class="cart-quantity">@product.SelectCount <strong>&times;</strong></span>
-                            <span class="cart-price">$@product.Price</span>
-                        </p>
-                    </div>
-                    <button class="minicart-remove"><i class="ion-android-close"></i></button>
-                </li>
+            <li class="minicart-item">
+                <div class="minicart-thumb">
+                    <a href="product-details.html">
+                        <img src="~/assets/img/product/@product.Image" alt="product">
+                    </a>
+                </div>
+                <div class="minicart-content">
+                    <h3 class="product-name">
+                        <a asp-controller="product" asp-action="detail" asp-route-id="@product.ProdId">@product.Name</a>
+                    </h3>
+                    <p>
+                        <span class="cart-quantity">@product.SelectCount <strong>&times;</strong></span>
+                        <span class="cart-price">$@product.Price</span>
+                    </p>
+                </div>
+                <a asp-controller="basket" asp-action="DeleteFromBasket" asp-route-id="@product.ProdId" class="minicart-remove deletefrombasket"><i class="ion-android-close"></i></a>
+            </li>
 
             }
         </ul>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="minicart-button">
-        <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
+        <a  asp-controller="basket" asp-action="index"><i class="fa fa-shopping-cart"></i> view cart</a>
         <a href="cart.html"><i class="fa fa-share"></i> checkout</a>
     </div>
 </div>

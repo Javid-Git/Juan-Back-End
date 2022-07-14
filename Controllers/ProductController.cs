@@ -42,20 +42,20 @@ namespace Juan.Controllers
 
             return View(shopVM);
         }
-        public async Task<IActionResult> ModalView(int? id)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            Product product = await _context.Products.Include(p=>p.Photos).FirstOrDefaultAsync(p => p.Id == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> ModalView(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    Product product = await _context.Products.Include(p=>p.Photos).FirstOrDefaultAsync(p => p.Id == id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return PartialView("_ModalViewPartial", product);
-        }
+        //    return PartialView("_ModalViewPartial", product);
+        //}
         public async Task<IActionResult> Search(string search)
         {
             List<Product> products = await _context.Products.Where(p => p.Name.ToLower().Contains(search.ToLower())).ToListAsync();
