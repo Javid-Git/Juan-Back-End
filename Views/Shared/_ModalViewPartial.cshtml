@@ -46,11 +46,11 @@
                         <div class="quantity">
                             <div class="pro-qty">
                                 <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@Model.Product.Id" class="dec qtybtn subCount">-</a>
-                                <input type="text" value="@(Model.BasketVM != null? Model.BasketVM.SelectCount : 1)">
+                                <input id="myText" type="text" value="@(Model.BasketVM != null? Model.BasketVM.SelectCount : 1)">
                                 <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@Model.Product.Id" class="dec qtybtn addCount">+</a>
                             </div>
                         </div>
-                        <a asp-controller="basket" asp-action="addtobasket" asp-route-id="@Model.Product.Id" class="btn btn-default addtobasket">Add To Cart</a>
+                        <a asp-controller="basket" asp-action="addtobasket" asp-route-id="@Model.Product.Id" class="btn btn-default addtobasket" id="addtobasket">Add To Cart</a>
                     </div>
                     <div class="availability mb-20">
                         <h5 class="cat-title">Availability:</h5>

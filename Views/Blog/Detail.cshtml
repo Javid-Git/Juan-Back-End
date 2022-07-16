@@ -135,90 +135,35 @@
                             <!-- blog single item start -->
                             <!-- comment area start -->
                             <div class="comment-section section-padding">
-                                <h5>03 Comment</h5>
+                                <h5>Comment Section</h5>
                                 <ul>
-                                    <li>
-                                        <div class="author-avatar">
-                                            <img src="~/assets/img/blog/comment-icon.png" alt="">
-                                        </div>
-                                        <div class="comment-body">
-                                            <span class="reply-btn"><a href="#">Reply</a></span>
-                                            <h5 class="comment-author">Admin</h5>
-                                            <div class="comment-post-date">
-                                                15 Dec, 2019 at 9:30pm
-                                            </div>
-                                            <p>
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                                adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="comment-children">
-                                        <div class="author-avatar">
-                                            <img src="~/assets/img/blog/comment-icon.png" alt="">
-                                        </div>
-                                        <div class="comment-body">
-                                            <span class="reply-btn"><a href="#">Reply</a></span>
-                                            <h5 class="comment-author">Admin</h5>
-                                            <div class="comment-post-date">
-                                                20 Nov, 2019 at 9:30pm
-                                            </div>
-                                            <p>
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                                adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="author-avatar">
-                                            <img src="~/assets/img/blog/comment-icon.png" alt="">
-                                        </div>
-                                        <div class="comment-body">
-                                            <span class="reply-btn"><a href="#">Reply</a></span>
-                                            <h5 class="comment-author">Admin</h5>
-                                            <div class="comment-post-date">
-                                                25 Jan, 2019 at 9:30pm
-                                            </div>
-                                            <p>
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                                adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
-                                            </p>
-                                        </div>
-                                    </li>
+                                    @foreach (Coment coment in Model.Coments)
+                                    {
+                                        if (coment.BlogId == Model.Blog.Id)
+                                        {
+                                            <li>
+                                                <div class="author-avatar">
+                                                    <img src="~/assets/img/blog/comment-icon.png" alt="">
+                                                </div>
+                                                <div class="comment-body">
+                                                    <span class="reply-btn"><a href="#">Reply</a></span>
+                                                    <h5 class="comment-author">@Model.Users.FirstOrDefault(u => u.Id == coment.UserId).FullName</h5>
+                                                    <div class="comment-post-date">
+                                                        @coment.Date.ToString("dd MMM, yyy" + "at"+ "HH:mm")
+                                                    </div>
+                                                    <p>
+                                                        @coment.Text
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
                                 </ul>
                             </div>
                             <!-- comment area end -->
                             <!-- start blog comment box -->
                             <div class="blog-comment-wrapper">
-                                <h5>Leave A Reply</h5>
-                                <p>Email address will not be published. Required fields are marked *</p>
-                                <form action="#">
-                                    <div class="comment-post-box">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <label>Comment</label>
-                                                <textarea name="commnet" placeholder="Write a comment"></textarea>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4">
-                                                <label>Name</label>
-                                                <input type="text" class="coment-field" placeholder="Name">
-                                            </div>
-                                            <div class="col-lg-4 col-md-4">
-                                                <label>Email</label>
-                                                <input type="text" class="coment-field" placeholder="Email">
-                                            </div>
-                                            <div class="col-lg-4 col-md-4">
-                                                <label>Website</label>
-                                                <input type="text" class="coment-field" placeholder="Website">
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="coment-btn">
-                                                    <input class="btn" type="submit" name="submit" value="POST COMMENT">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                @await Html.PartialAsync("_ComentsPartial", Model)
                             </div>
                             <!-- start blog comment box -->
                         </div>

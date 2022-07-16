@@ -109,7 +109,7 @@
             .then(res => res.text())
             .then(data => {
                 $('.header-cart').html(data);
-                fetch('/basket/addtobasket')
+                fetch('/basket/DeleteUpdate')
                     .then(res => res.json())
                     .then(data => {
                         $('.notification').html(data);
@@ -175,9 +175,40 @@
                     .then(res => res.text())
                     .then(data => {
                         $('.header-cart').html(data);
+                        fetch('/basket/DeleteUpdate')
+                            .then(res => res.json())
+                            .then(data => {
+                                $('.notification').html(data);
+                            });
                     });
             })
     })
 
+    //$(document).on('click', '#addtobasket', function (e) {
+    //    $(this).preventDefault();
+    //    let value = $('#myText').attr('value');
+    //    fetch($(this).attr('href'))
+    //        .then(res => res.text())
+    //        .then(data => {
+    //            $('.header-cart').html(data);
+    //        })
+    ////    $.ajax({
+    ////        type: 'GET',
+    ////        url: '@Url.Action("AddToBasket", "Basket")',
+    ////        cache: false,
+    ////        data: { myText: $("#myText").attr('value') },
+    ////        success: function (data) {
+    ////        },
+    ////        error: function (req) {
+
+    ////        }
+    ////    });
+
+    ////    // we make sure to cancel the default action of the link
+    ////    // because we will be sending an AJAX call
+    ////    return false;
+    //});
+    
 
 })
+

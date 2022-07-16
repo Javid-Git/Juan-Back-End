@@ -53,6 +53,9 @@ namespace Juan.Areas.Manage.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.Tags = await _context.Tags.ToListAsync();
+            ViewBag.Colors = await _context.Colors.ToListAsync();
+            ViewBag.Sizes = await _context.Sizes.ToListAsync();
 
             return View();
         }
@@ -61,27 +64,27 @@ namespace Juan.Areas.Manage.Controllers
         public async Task<IActionResult> Create(Product product)
         {
             ViewBag.Categories = await _context.Categories.ToListAsync();
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-            if (product.MainFormImage == null )
-            {
-                ModelState.AddModelError("File", "You should add an image");
-                return View();
-
-            }
-
-            //if (product == null || !await _context.Products.AnyAsync(b => b.Id == product.BrandId && !b.IsDeleted))
+            ViewBag.Tags = await _context.Tags.ToListAsync();
+            ViewBag.Colors = await _context.Colors.ToListAsync();
+            ViewBag.Sizes = await _context.Sizes.ToListAsync();
+            //ViewBag.Categories = await _context.Categories.ToListAsync();
+            //if (!ModelState.IsValid)
             //{
-            //    ModelState.AddModelError("BrandId", "Not the right brand");
+            //    return BadRequest();
+            //}
+            //if (product.MainFormImage == null )
+            //{
+            //    ModelState.AddModelError("File", "You should add an image");
+            //    return View();
+
+            //}
+
+
+            //if (await _context.Products.AnyAsync(b => b.Name.ToLower().Trim() == product.Name.ToLower().Trim() && !b.IsDeleted))
+            //{
+            //    ModelState.AddModelError("Name", $"{product.Name} Already Exists");
             //    return View();
             //}
-            if (await _context.Products.AnyAsync(b => b.Name.ToLower().Trim() == product.Name.ToLower().Trim() && !b.IsDeleted))
-            {
-                ModelState.AddModelError("Name", $"{product.Name} Already Exists");
-                return View();
-            }
             if (product.MainFormImage != null)
             {
                 if (product.MainFormImage.CheckFileType("image/*"))
@@ -97,9 +100,87 @@ namespace Juan.Areas.Manage.Controllers
                 product.MainImage = await product.MainFormImage.CreateAsync(_env, "assets", "img", "product");
 
             }
+            if (!ModelState.IsValid) return View();
 
+            if (product.TagIds == null && product.Count <= 0)
+            {
+                ModelState.AddModelError("TagIds", "Tag Id s Is Required");
+                return View();
+            }
+            
 
-            //Brand brand = await _context.Brands.FirstOrDefaultAsync(b => b.Id == product.BrandId);
+            if (product.CategoryId == null)
+            {
+                ModelState.AddModelError("CategoryId", "You Must Select Correct");
+                return View();
+            }
+
+            if (!await _context.Categories.AnyAsync(c => !c.IsDeleted &&  c.Id == product.CategoryId))
+            {
+                ModelState.AddModelError("CategoryId", "Select Correct Category");
+                return View();
+            }
+
+            if (product.ColorIds.Count() != product.SizeIds.Count() || product.ColorIds.Count() != product.Counts.Count() || product.SizeIds.Count() != product.Counts.Count())
+            {
+                ModelState.AddModelError("", "Incorrect List");
+                return View();
+            }
+
+            List<ProductColorSize> productColorSizes = new List<ProductColorSize>();
+
+            for (int i = 0; i < product.ColorIds.Count(); i++)
+            {
+                if (!await _context.Colors.AnyAsync(c => c.Id == product.ColorIds[i]))
+                {
+                    ModelState.AddModelError("", $"this color id {product.ColorIds[i]} is Incorrect");
+                    return View();
+                }
+
+                if (!await _context.Sizes.AnyAsync(c => c.Id == product.SizeIds[i]))
+                {
+                    ModelState.AddModelError("", $"this size id {product.SizeIds[i]} is Incorrect");
+                    return View();
+                }
+
+                if (product.Counts[i] < 0)
+                {
+                    ModelState.AddModelError("", "Count is Incorrect");
+                    return View();
+                }
+
+                ProductColorSize productColorSize = new ProductColorSize
+                {
+                    ColorId = product.ColorIds[i],
+                    SizeId = product.SizeIds[i],
+                    Count = product.Counts[i]
+                };
+
+                productColorSizes.Add(productColorSize);
+            }
+
+            product.ProductColorSizes = productColorSizes;
+
+            //List<ProductTag> productTags = new List<ProductTag>();
+
+            //foreach (int tagId in product.TagIds)
+            //{
+            //    if (!await _context.Tags.AnyAsync(t => t.Id == tagId))
+            //    {
+            //        ModelState.AddModelError("TagIds", $"Tag {tagId} IsCorrect");
+            //        return View();
+            //    }
+
+            //    ProductTag productTag = new ProductTag
+            //    {
+            //        TagId = tagId
+            //    };
+
+            //    productTags.Add(productTag);
+            //}
+
+            //product.ProductTags = productTags;
+
             TempData["success"] = "Product was created successfully";
             product.CreatedAt = DateTime.UtcNow.AddHours(+4);
 
@@ -108,7 +189,8 @@ namespace Juan.Areas.Manage.Controllers
             product.DiscountedPrice = product.DiscountedPrice;
             product.Count = product.Count;
             product.Describtion = product.Describtion;
-            //product.DetailImages = await product.DetailFormImages.CreateMultipleAsync(_env, "assets", "images", "detailimages");
+            product.Count = productColorSizes.Sum(x => x.Count);
+
             await _context.AddAsync(product);
             _context.SaveChanges();
             if (product.DetailFormImages != null)
@@ -313,6 +395,13 @@ namespace Juan.Areas.Manage.Controllers
             dbproduct.IsDeleted = false;
             _context.SaveChanges();
             return PartialView("_ProductIndexPartial", PageNatedList<Product>.Create(page, query, itemcount));
+        }
+        public async Task<IActionResult> GetProductColorSizePartial()
+        {
+            ViewBag.Colors = await _context.Colors.ToListAsync();
+            ViewBag.Sizes = await _context.Sizes.ToListAsync();
+
+            return PartialView("_ProductColorSizePatial");
         }
     }
 }

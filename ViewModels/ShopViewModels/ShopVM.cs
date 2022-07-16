@@ -12,8 +12,9 @@ namespace Juan.ViewModels.ShopViewModels
         public List<Size> Sizes { get; set; }
         public List<Product> ProductForCategory { get; set; }
         public List<Color> Colors { get; set; }
-        public List<ProductColor> ProductColors { get; set; }
-        public List<ProductSize> ProductSizes{ get; set; }
+        //public List<Noneed2> ProductColors { get; set; }
+        //public List<Noneed1> ProductSizes{ get; set; }
         public List<Category> Categories { get; set; }
+        public List<ProductColorSize> ProductColorSizes { get; set; }
     }
 }

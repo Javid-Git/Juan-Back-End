@@ -4,14 +4,16 @@ using Juan.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Juan.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220714214106_AddedLotsOfThingsProductColorSize")]
+    partial class AddedLotsOfThingsProductColorSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,44 +308,6 @@ namespace Juan.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Colors");
-                });
-
-            modelBuilder.Entity("Juan.Models.Coment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BlogId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Coments");
                 });
 
             modelBuilder.Entity("Juan.Models.Photo", b =>
@@ -712,21 +676,6 @@ namespace Juan.Migrations
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Juan.Models.Coment", b =>
-                {
-                    b.HasOne("Juan.Models.Blog", "Blog")
-                        .WithMany("Coments")
-                        .HasForeignKey("BlogId");
-
-                    b.HasOne("Juan.Models.Product", "Product")
-                        .WithMany("Coments")
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Juan.Models.AppUser", "User")
-                        .WithMany("Coments")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Juan.Models.Photo", b =>

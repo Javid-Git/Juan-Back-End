@@ -19,5 +19,7 @@ namespace Juan.Models
         public Nullable<DateTime> UpdatedAt { get; set; }
         public IEnumerable<BlogBlCategory> BlogCategories{ get; set; }
         public IEnumerable<BlogTag> BlogTags{ get; set; }
+        public List<Coment> Coments { get; set; }
+
     }
 }

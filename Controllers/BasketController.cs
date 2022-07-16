@@ -36,7 +36,7 @@ namespace Juan.Controllers
             }
             return View(await _basketProduct(basketVMs));
         }
-        public async Task<IActionResult> AddToBasket(int? id)
+        public async Task<IActionResult> AddToBasket(int? id, int? count)
         {
             if (id == null)
             {
@@ -65,15 +65,62 @@ namespace Juan.Controllers
             }
             else
             {
-                BasketVM basketVM = new BasketVM
+                if (count != null)
                 {
-                    ProdId = product.Id,
-                    SelectCount = 1
-                };
+                    BasketVM basketVM = new BasketVM
+                    {
+                        ProdId = product.Id,
+                        SelectCount = (int)count
+                    };
+                    basketVMs.Add(basketVM);
 
-                basketVMs.Add(basketVM);
+                }
+                else
+                {
+                    BasketVM basketVM = new BasketVM
+                    {
+                        ProdId = product.Id,
+                        SelectCount = 1
+                    };
+                    basketVMs.Add(basketVM);
+
+                }
+
+
             }
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser appUser = await _userManager.Users.Include(u => u.Baskets).FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
+                if (appUser.Baskets != null && appUser.Baskets.Count() > 0)
+                {
+                    Basket dbBasketproduct = appUser.Baskets.FirstOrDefault(p => p.ProductId == id);
+                    if (dbBasketproduct != null)
+                    {
+                        dbBasketproduct.Counts += 1;
+                    }
+                    else
+                    {
+                        Basket newBasket = new Basket
+                        {
+                            ProductId = (int)id,
+                            UserId = appUser.Id,
+                            Counts = 1
+                        };
+
+                        appUser.Baskets.Add(newBasket);
+                    }
+                }
+                else
+                {
+                    List<Basket> baskets = new List<Basket>
+                    {
+                        new Basket{ProductId = (int)id, Counts = 1}
+                    };
+                    appUser.Baskets = baskets;
+                }
+                await _context.SaveChangesAsync();
+            }
             basket = JsonConvert.SerializeObject(basketVMs);
             HttpContext.Response.Cookies.Append("basket", basket);
 
@@ -114,6 +161,24 @@ namespace Juan.Controllers
                 BasketVM basketVM = basketVMs.FirstOrDefault(b => b.ProdId == id);
 
                 if (basketVM == null) return NotFound();
+                if (User.Identity.IsAuthenticated)
+                {
+                    AppUser appUser = await _userManager.Users.Include(u => u.Baskets).FirstOrDefaultAsync(u => u.UserName == User.Identity.Name && !u.IsAdmin);
+
+                    if (appUser.Baskets != null && appUser.Baskets.Count() > 0)
+                    {
+                        Basket dbBasketproduct = appUser.Baskets.FirstOrDefault(p => p.ProductId == id);
+                        if (dbBasketproduct != null)
+                        {
+                            dbBasketproduct.Counts = count <= 0 ? 1 : count;
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            return NotFound();
+                        }
+                    }
+                }
 
                 basketVM.SelectCount = count <= 0 ? 1 : count;
 
@@ -241,6 +306,23 @@ namespace Juan.Controllers
                 item.Image = dbproduct.MainImage;
             };
             return basketVMs;
+        }
+        public async Task<IActionResult> DeleteUpdate()
+        {
+            string basket = Request.Cookies["basket"];
+            List<BasketVM> basketVMs = null;
+
+            if (!string.IsNullOrWhiteSpace(basket))
+            {
+                basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            }
+            else
+            {
+                basketVMs = new List<BasketVM>();
+            }
+
+            return Json(basketVMs.Count);
+
         }
     }
 }

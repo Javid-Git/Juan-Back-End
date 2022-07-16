@@ -1,0 +1,16 @@
+﻿@model Product
+
+<div class="form-group col-lg-4">
+    <label>Color</label>
+    <select name="ColorIds" class="form-control" asp-items="new SelectList(ViewBag.Colors, nameof(Color.Id),nameof(Color.Name))">
+    </select>
+</div>
+<div class="form-group  col-lg-4">
+    <label>Size</label>
+    <select name="SizeIds" class="form-control" asp-items="new SelectList(ViewBag.Sizes, nameof(Size.Id),nameof(Size.Number))">
+    </select>
+</div>
+<div class="form-group col-lg-4">
+    <label>Count</label>
+    <input name="Counts" class="form-control" placeholder="Count">
+</div>

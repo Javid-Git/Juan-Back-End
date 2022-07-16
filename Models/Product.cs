@@ -26,8 +26,10 @@ namespace Juan.Models
         public bool IsTopSeller { get; set; }
         public bool IsAvailable { get; set; }
         public IEnumerable<Photo> Photos { get; set; }
-        public IEnumerable<ProductSize> ProductSizes { get; set; }
-        public IEnumerable<ProductColor> ProductColors { get; set; }
+        //public IEnumerable<Noneed1> ProductSizes { get; set; }
+        //public IEnumerable<Noneed2> ProductColors { get; set; }
+        public IEnumerable<ProductColorSize> ProductColorSizes { get; set; }
+
         public int CategoryId { get; set; }
         public Category Categories { get; set; }
         public bool IsDeleted { get; set; }
@@ -35,10 +37,19 @@ namespace Juan.Models
         public Nullable<DateTime> CreatedAt { get; set; }
         public Nullable<DateTime> DeletedAt { get; set; }
         public Nullable<DateTime> UpdatedAt { get; set; }
-
+        public List<Coment> Coments { get; set; }
         [NotMapped]
         public IEnumerable<IFormFile> DetailFormImages { get; set; }
         [NotMapped]
         public IFormFile MainFormImage { get; set; }
+        [NotMapped]
+        public IEnumerable<int> TagIds { get; set; }
+        [NotMapped]
+        public List<int> ColorIds { get; set; }
+        [NotMapped]
+        public List<int> SizeIds { get; set; }
+        [NotMapped]
+        public List<int> Counts { get; set; }
+
     }
 }

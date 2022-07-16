@@ -1,4 +1,4 @@
-﻿@model Product
+﻿@model ProductDetailVM
 @{
     ViewData["Title"] = "Detail";
 }
@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-lg-5">
                                 <div class="product-large-slider mb-20">
-                                    @foreach (Photo photo in Model.Photos)
+                                    @foreach (Photo photo in Model.Product.Photos)
                                     {
                                         <div class="pro-large-img img-zoom">
                                             <img src="~/assets/img/product/@photo.Image" alt="" />
@@ -43,7 +43,7 @@
                                     }
                                 </div>
                                 <div class="pro-nav slick-row-5">
-                                    @foreach (Photo photo in Model.Photos)
+                                    @foreach (Photo photo in Model.Product.Photos)
                                     {
                                         <div class="pro-large-img img-zoom">
                                             <img src="~/assets/img/product/@photo.Image" alt="" />
@@ -53,23 +53,23 @@
                             </div>
                             <div class="col-lg-7">
                                 <div class="product-details-des">
-                                    <h3 class="pro-det-title">@Model.Name</h3>
+                                    <h3 class="pro-det-title">@Model.Product.Name</h3>
                                     <div class="pro-review">
                                         <span><a href="#">1 Review(s)</a></span>
                                     </div>
                                     <div class="price-box">
-                                        @if (Model.DiscountedPrice > 0)
+                                        @if (Model.Product.DiscountedPrice > 0)
                                         {
-                                            <span class="price-regular">$@Model.DiscountedPrice</span>
-                                            <span class="price-old"><del>$@Model.Price</del></span>
+                                            <span class="price-regular">$@Model.Product.DiscountedPrice</span>
+                                            <span class="price-old"><del>$@Model.Product.Price</del></span>
                                         }
                                         else
                                         {
-                                            <span class="price-old"><del>$@Model.Price</del></span>
+                                            <span class="price-old"><del>$@Model.Product.Price</del></span>
                                         }
                                     </div>
                                     <p>
-                                        @Model.Describtion
+                                        @Model.Product.Describtion
                                     </p>
                                     <div class="quantity-cart-box d-flex align-items-center mb-20">
                                         <div class="quantity">
@@ -79,7 +79,7 @@
                                     </div>
                                     <div class="availability mb-20">
                                         <h5 class="cat-title">Availability:</h5>
-                                        @if (Model.Count > 0)
+                                        @if (Model.Product.Count > 0)
                                         {
                                             <span style="color:greenyellow">In Stock</span>
 
@@ -124,7 +124,7 @@
                                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque.</p>
                                                 <div class="review-description">
                                                     <div class="tab-thumb">
-                                                        <img src="assets/img/about/services.jpg" alt="">
+                                                        <img src="~/assets/img/about/services.jpg" alt="">
                                                     </div>
                                                     <div class="tab-des">
                                                         <h3>Product Information :</h3>
@@ -156,65 +156,46 @@
                                             </table>
                                         </div>
                                         <div class="tab-pane fade" id="tab_three">
-                                            <form action="#" class="review-form">
-                                                <h5>1 review for <span>Chaz Kangeroo Hoodies</span></h5>
+                                            <h5>Reviews for <span>@Model.Product.Name</span></h5>
+                                            @foreach (Coment coment in Model.Coments)
+                                            {
                                                 <div class="total-reviews">
                                                     <div class="rev-avatar">
-                                                        <img src="assets/img/about/avatar.jpg" alt="">
+                                                        <img src="~/assets/img/about/avatar.jpg" alt="">
                                                     </div>
                                                     <div class="review-box">
                                                         <div class="ratings">
-                                                            <span class="good"><i class="fa fa-star"></i></span>
-                                                            <span class="good"><i class="fa fa-star"></i></span>
-                                                            <span class="good"><i class="fa fa-star"></i></span>
-                                                            <span class="good"><i class="fa fa-star"></i></span>
-                                                            <span><i class="fa fa-star"></i></span>
+                                                            @if (coment.Rating == 5)
+                                                            {
+                                                                @for (int i = 0; i < coment.Rating; i++)
+                                                                {
+                                                                    <span class="good"><i class="fa fa-star"></i></span>
+
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                @for (int i = 0; i < coment.Rating; i++)
+                                                                {
+                                                                    <span class="good"><i class="fa fa-star"></i></span>
+
+                                                                }
+                                                                @for (int i = 0; i < 5 - coment.Rating; i++)
+                                                                {
+                                                                    <span><i class="fa fa-star-o"></i></span>
+
+                                                                }
+                                                            }
                                                         </div>
                                                         <div class="post-author">
-                                                            <p><span>admin -</span> 30 Nov, 2018</p>
+                                                            <p><span>@Model.Users.FirstOrDefault(u=>u.Id == coment.UserId).FullName -</span>@coment.Date.ToString("dd-MMMM,yyyy")</p>
                                                         </div>
-                                                        <p>Aliquam fringilla euismod risus ac bibendum. Sed sit amet sem varius ante feugiat lacinia. Nunc ipsum nulla, vulputate ut venenatis vitae, malesuada ut mi. Quisque iaculis, dui congue placerat pretium, augue erat accumsan lacus</p>
+                                                        <p>@coment.Text</p>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
-                                                    <div class="col">
-                                                        <label class="col-form-label"><span class="text-danger">*</span> Your Name</label>
-                                                        <input type="text" class="form-control" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col">
-                                                        <label class="col-form-label"><span class="text-danger">*</span> Your Email</label>
-                                                        <input type="email" class="form-control" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col">
-                                                        <label class="col-form-label"><span class="text-danger">*</span> Your Review</label>
-                                                        <textarea class="form-control" required></textarea>
-                                                        <div class="help-block pt-10"><span class="text-danger">Note:</span> HTML is not translated!</div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col">
-                                                        <label class="col-form-label"><span class="text-danger">*</span> Rating</label>
-                                                        &nbsp;&nbsp;&nbsp; Bad&nbsp;
-                                                        <input type="radio" value="1" name="rating">
-                                                        &nbsp;
-                                                        <input type="radio" value="2" name="rating">
-                                                        &nbsp;
-                                                        <input type="radio" value="3" name="rating">
-                                                        &nbsp;
-                                                        <input type="radio" value="4" name="rating">
-                                                        &nbsp;
-                                                        <input type="radio" value="5" name="rating" checked>
-                                                        &nbsp;Good
-                                                    </div>
-                                                </div>
-                                                <div class="buttons">
-                                                    <button class="sqr-btn" type="submit">Continue</button>
-                                                </div>
-                                            </form> <!-- end of review-form -->
+                                            }
+                                            
+                                            @await Html.PartialAsync("_ProductReviewPartial", Model)
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +221,7 @@
                                         <div class="product-item mb-50">
                                             <div class="product-thumb">
                                                 <a href="product-details.html">
-                                                    <img src="assets/img/product/product-1.jpg" alt="">
+                                                    <img src="~/assets/img/product/product-1.jpg" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-content">
@@ -266,7 +247,7 @@
                                         <div class="product-item mb-50">
                                             <div class="product-thumb">
                                                 <a href="product-details.html">
-                                                    <img src="assets/img/product/product-2.jpg" alt="">
+                                                    <img src="~/assets/img/product/product-2.jpg" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-content">
@@ -292,7 +273,7 @@
                                         <div class="product-item mb-50">
                                             <div class="product-thumb">
                                                 <a href="product-details.html">
-                                                    <img src="assets/img/product/product-3.jpg" alt="">
+                                                    <img src="~/assets/img/product/product-3.jpg" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-content">
@@ -318,7 +299,7 @@
                                         <div class="product-item mb-50">
                                             <div class="product-thumb">
                                                 <a href="product-details.html">
-                                                    <img src="assets/img/product/product-4.jpg" alt="">
+                                                    <img src="~/assets/img/product/product-4.jpg" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-content">
@@ -344,7 +325,7 @@
                                         <div class="product-item mb-50">
                                             <div class="product-thumb">
                                                 <a href="product-details.html">
-                                                    <img src="assets/img/product/product-5.jpg" alt="">
+                                                    <img src="~/assets/img/product/product-5.jpg" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-content">

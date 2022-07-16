@@ -32,7 +32,7 @@
                                     </div>
                                 </td>
                                 <td class="pro-subtotal"><span>$@((product.Price)*product.SelectCount)</span></td>
-                                <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                <td class="pro-remove"><a class="deletefromcartbtn" asp-controller="basket" asp-action="DeleteFromCart" asp-route-id="@product.ProdId"><i class="fa fa-trash-o"></i></a></td>
                             </tr>
                             }
                             

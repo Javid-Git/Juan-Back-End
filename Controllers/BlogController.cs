@@ -2,6 +2,7 @@
 using Juan.Models;
 using Juan.ViewModels;
 using Juan.ViewModels.BlogViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +19,7 @@ namespace Juan.Controllers
         {
             _context = context;
         }
+
         public async Task<IActionResult> Index(int page=1)
         {
             IQueryable<Blog> blogs =  _context.Blogs.AsQueryable();
@@ -38,24 +40,59 @@ namespace Juan.Controllers
 
             return View(blogVM);
         }
+        [Authorize(Roles = "User")]
+
         public async Task<IActionResult> Detail(int? id, int page = 1)
         {
             IQueryable<Blog> blogs =  _context.Blogs.Include(b=>b.BlogTags).AsQueryable();
             List<Tag> tags = await _context.Tags.ToListAsync();
             List<BlCategory> blCategories = await _context.BlCategories.ToListAsync();
             List<BlogBlCategory> blogBlCategories = await _context.BlogBlCategories.ToListAsync();
-            Blog blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
-            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
-
-            BlogVM blogVM = new BlogVM
+            Blog blog = new Blog();
+            if (id != null)
             {
-                Blogs = PageNatedList<Blog>.Create(page, blogs, itemcount),
-                BlCategories = blCategories,
-                BlogBlCategories = blogBlCategories,
-                Tags = tags,
-                Blog = blog
-            };
-            return View(blogVM);
+                blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
+
+            }
+            else
+            {
+                blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == Convert.ToInt32(TempData["BlogId"]));
+            }
+            List<Coment> coments = await _context.Coments.ToListAsync();
+            Coment coment = new Coment();
+            if (id != null)
+            {
+                coment = await _context.Coments.FirstOrDefaultAsync(c => c.BlogId == blog.Id);
+
+            }
+            else
+            {
+                coment = await _context.Coments.FirstOrDefaultAsync(c => c.BlogId == Convert.ToInt32(TempData["BlogId"]));
+            }
+            AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            List<AppUser> users = await _context.Users.ToListAsync();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+            if (User.Identity.IsAuthenticated)
+            {
+                BlogVM blogVM = new BlogVM
+                {
+                    Blogs = PageNatedList<Blog>.Create(page, blogs, itemcount),
+                    BlCategories = blCategories,
+                    BlogBlCategories = blogBlCategories,
+                    Tags = tags,
+                    Blog = blog,
+                    Coments = coments,
+                    User = user,
+                    Coment = coment,
+                    Users = users
+                };
+                return View(blogVM);
+            }
+            else
+            {
+                return RedirectToAction("login", "account", new { area = "" });
+            }
+            
         }
         public async Task<IActionResult> SortByTag(int? id)
         {
@@ -96,6 +133,52 @@ namespace Juan.Controllers
             }
 
             return PartialView("_BlogIndexPartial", blogs);
+        }
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> PostComent(Coment coment, int? id, string? userId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return RedirectToAction("Detail");
+                }
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (coment.Text == null)
+                {
+                    return RedirectToAction("Detail");
+
+                }
+                
+                Coment dbcoment = new Coment
+                {
+                    Text = coment.Text,
+                    Date = DateTime.UtcNow.AddHours(+4),
+                    UserId = userId,
+                    BlogId = id
+                };
+                //Coment postedcoment = await _context.Coments.FirstOrDefaultAsync(c => c.UserId == userId && c.BlogId == id);
+                //if (postedcoment != null)
+                //{
+                //    _context.Coments.Remove(postedcoment);
+                //}
+                TempData["BlogId"] = id;
+                await _context.Coments.AddAsync(dbcoment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Detail", id);
+
+            }
+            else
+            {
+                return RedirectToAction("login", "account", new { area = "" });
+
+            }
+
         }
     }
 }

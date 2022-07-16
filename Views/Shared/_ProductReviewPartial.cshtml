@@ -1,0 +1,42 @@
+﻿@model ProductDetailVM
+<form asp-controller="product" asp-action="postcoment" asp-route-userId="@Model.User.Id" asp-route-productId="@Model.Product.Id" class="review-form">
+
+    <div class="form-group row">
+        <div class="col">
+            <label class="col-form-label"><span class="text-danger">*</span> Your Name</label>
+            <input asp-for="@Model.User.FullName" class="form-control" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label class="col-form-label"><span class="text-danger">*</span> Your Email</label>
+            <input asp-for="@Model.User.Email" class="form-control" required>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label class="col-form-label"><span class="text-danger">*</span> Your Review</label>
+            <textarea asp-for="@Model.Coment.Text" class="form-control" required></textarea>
+            <div class="help-block pt-10"><span class="text-danger">Note:</span> HTML is not translated!</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col">
+            <label class="col-form-label"><span class="text-danger">*</span> Rating</label>
+            &nbsp;&nbsp;&nbsp; Bad&nbsp;
+            <input type="radio" value="1" name="rating">
+            &nbsp;
+            <input type="radio" value="2" name="rating">
+            &nbsp;
+            <input type="radio" value="3" name="rating">
+            &nbsp;
+            <input type="radio" value="4" name="rating">
+            &nbsp;
+            <input type="radio" value="5" name="rating" checked>
+            &nbsp;Good
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="sqr-btn" type="submit">Continue</button>
+    </div>
+</form> <!-- end of review-form -->
