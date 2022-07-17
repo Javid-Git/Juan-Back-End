@@ -9,5 +9,7 @@ namespace Juan.Interfaces
     public interface ILayoutService
     {
         Task<List<BasketVM>> GetBasket();
+        Task<IDictionary<string, string>> GetSetting();
+        
     }
 }

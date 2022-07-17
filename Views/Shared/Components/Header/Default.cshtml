@@ -1,4 +1,4 @@
-﻿@model  List<BasketVM>
+﻿@model  HeaderViewModel
 <!-- Start Header Area -->
 <header class="header-area">
     <!-- main header start -->
@@ -9,7 +9,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="welcome-message">
-                            <p>Welcome to Juan online store</p>
+                            <p>@Model.Settings.FirstOrDefault(s => s.Key == "IntroMessage").Value</p>
                         </div>
                     </div>
                     <div class="col-lg-6 text-right">
@@ -105,7 +105,7 @@
                                     <li>
                                         <a asp-controller="basket" asp-action="openbasket"  class="minicart-btn openbasket">
                                             <i class="ion-bag"></i>
-                                            <div class="notification">@Model.Count()</div>
+                                            <div class="notification">@Model.BasketVMs.Count()</div>
                                         </a>
                                     </li>
                                 </ul>

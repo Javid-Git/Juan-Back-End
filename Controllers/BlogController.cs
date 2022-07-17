@@ -59,6 +59,7 @@ namespace Juan.Controllers
                 blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == Convert.ToInt32(TempData["BlogId"]));
             }
             List<Coment> coments = await _context.Coments.ToListAsync();
+            List<ComentReply> comentReplies = await _context.ComentReplies.ToListAsync();
             Coment coment = new Coment();
             if (id != null)
             {
@@ -84,8 +85,10 @@ namespace Juan.Controllers
                     Coments = coments,
                     User = user,
                     Coment = coment,
-                    Users = users
+                    Users = users,
+                    ComentReplies = comentReplies
                 };
+                ViewBag.BlogVM = blogVM;
                 return View(blogVM);
             }
             else
@@ -136,7 +139,7 @@ namespace Juan.Controllers
         }
         [Authorize(Roles = "User")]
         [HttpPost]
-        public async Task<IActionResult> PostComent(Coment coment, int? id, string? userId)
+        public async Task<IActionResult> PostComent(Coment coment, int? id, string? userId, int? comentId)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -154,23 +157,36 @@ namespace Juan.Controllers
                     return RedirectToAction("Detail");
 
                 }
-                
-                Coment dbcoment = new Coment
+                if (comentId == null)
                 {
-                    Text = coment.Text,
-                    Date = DateTime.UtcNow.AddHours(+4),
-                    UserId = userId,
-                    BlogId = id
-                };
-                //Coment postedcoment = await _context.Coments.FirstOrDefaultAsync(c => c.UserId == userId && c.BlogId == id);
-                //if (postedcoment != null)
-                //{
-                //    _context.Coments.Remove(postedcoment);
-                //}
-                TempData["BlogId"] = id;
-                await _context.Coments.AddAsync(dbcoment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Detail", id);
+                    Coment dbcoment = new Coment
+                    {
+                        Text = coment.Text,
+                        Date = DateTime.UtcNow.AddHours(+4),
+                        UserId = userId,
+                        BlogId = id
+                    };
+                    TempData["BlogId"] = id;
+                    await _context.Coments.AddAsync(dbcoment);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Detail", id);
+                }
+                else
+                {
+                    ComentReply dbcomentreply = new ComentReply
+                    {
+                        Text = coment.Text,
+                        Date = DateTime.UtcNow.AddHours(+4),
+                        UserId = userId,
+                        BlogId = id,
+                        ComentId = comentId
+                    };
+                    TempData["BlogId"] = id;
+                    await _context.ComentReplies.AddAsync(dbcomentreply);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Detail", id);
+                }
+                
 
             }
             else
@@ -178,6 +194,65 @@ namespace Juan.Controllers
                 return RedirectToAction("login", "account", new { area = "" });
 
             }
+
+        }
+        public async Task<IActionResult> AddReply(int? id, int? comentId, int page = 1)
+        {
+            if (comentId == null)
+            {
+                return BadRequest();
+            }
+            IQueryable<Blog> blogs = _context.Blogs.Include(b => b.BlogTags).AsQueryable();
+            List<Tag> tags = await _context.Tags.ToListAsync();
+            List<BlCategory> blCategories = await _context.BlCategories.ToListAsync();
+            List<BlogBlCategory> blogBlCategories = await _context.BlogBlCategories.ToListAsync();
+            Blog blog = new Blog();
+            if (id != null)
+            {
+                blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
+
+            }
+            else
+            {
+                blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == Convert.ToInt32(TempData["BlogId"]));
+            }
+            List<Coment> coments = await _context.Coments.ToListAsync();
+            Coment coment = new Coment();
+            if (id != null)
+            {
+                coment = await _context.Coments.FirstOrDefaultAsync(c => c.BlogId == blog.Id);
+
+            }
+            else
+            {
+                coment = await _context.Coments.FirstOrDefaultAsync(c => c.BlogId == Convert.ToInt32(TempData["BlogId"]));
+            }
+            AppUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            List<AppUser> users = await _context.Users.ToListAsync();
+            int itemcount = int.Parse(_context.Settings.FirstOrDefaultAsync(i => i.Key == "PageItemCount").Result.Value);
+            if (User.Identity.IsAuthenticated)
+            {
+                BlogVM blogVM = new BlogVM
+                {
+                    Blogs = PageNatedList<Blog>.Create(page, blogs, itemcount),
+                    BlCategories = blCategories,
+                    BlogBlCategories = blogBlCategories,
+                    Tags = tags,
+                    Blog = blog,
+                    Coments = coments,
+                    User = user,
+                    Coment = coment,
+                    Users = users,
+                    PostComentId = comentId
+                };
+                return PartialView("_BlogComentsPartial", blogVM);
+
+            }
+            else
+            {
+                return RedirectToAction("login", "account", new { area = "" });
+            }
+            
 
         }
     }

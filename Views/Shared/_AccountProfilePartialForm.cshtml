@@ -1,0 +1,54 @@
+﻿@model ProfileVM
+<div class="text text-danger"asp-validation-summary="ModelOnly"></div>
+<form asp-controller="account" asp-action="update">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="single-input-item">
+                <input asp-for="FullName" id="first-name" placeholder="Full Name" />
+                <span class="text text-danger" asp-validation-for="FullName"></span>
+
+            </div>
+        </div>
+    </div>
+    <div class="single-input-item">
+        <input asp-for="UserName" id="display-name" placeholder="Display Name" />
+        <span class="text text-danger" asp-validation-for="UserName"></span>
+
+    </div>
+    <div class="single-input-item">
+        <input asp-for="Email" id="email" placeholder="Email Address" />
+        <span class="text text-danger" asp-validation-for="Email"></span>
+
+    </div>
+    <fieldset>
+        <legend>Password change</legend>
+        <div class="single-input-item">
+            <input asp-for="CurrentPassword" id="current-pwd" placeholder="Current Password" />
+            <span class="text text-danger" asp-validation-for="CurrentPassword"></span>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="single-input-item">
+                    <input asp-for="NewPassword" id="new-pwd" placeholder="New Password" />
+                    <span class="text text-danger" asp-validation-for="NewPassword"></span>
+
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="single-input-item">
+                    <input asp-for="ConfirmPasword" id="confirm-pwd" placeholder="Confirm Password" />
+                    <span class="text text-danger" asp-validation-for="ConfirmPasword"></span>
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <div class="single-input-item">
+        <button class="check-btn sqr-btn ">Save Changes</button>
+    </div>
+</form>
+
+@section Script{
+    <partial name="_ValidationPartial">
+}

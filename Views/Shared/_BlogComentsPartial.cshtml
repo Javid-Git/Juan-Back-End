@@ -1,12 +1,14 @@
 ﻿@model BlogVM
 <h5>Leave A Reply</h5>
 <p>Email address will not be published. Required fields are marked *</p>
-<form asp-controller="blog" asp-action="postcoment" asp-route-id="@Model.Blog.Id" asp-route-userId="@Model.User.Id" method="post">
+<form asp-controller="blog" asp-action="postcoment" asp-route-id="@Model.Blog.Id" asp-route-userId="@Model.User.Id" asp-route-comentId="@Model.PostComentId" method="post">
     <div class="comment-post-box">
         <div class="row">
             <div class="col-12">
                 <label>Comment</label>
                 <textarea asp-for="@Model.Coment.Text" placeholder="Write a comment"></textarea>
+                <span class="text text-danger" asp-validation-for="@Model.Coment.Text"></span>
+
             </div>
             <div class="col-lg-4 col-md-4">
                 <label>Name</label>

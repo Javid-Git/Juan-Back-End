@@ -1,6 +1,7 @@
 ﻿using Juan.DAL;
 using Juan.Models;
 using Juan.ViewModels.BasketViewModel;
+using Juan.ViewModels.HeaderViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -20,7 +21,6 @@ namespace Juan.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(IDictionary<string, string> settings)
         {
-            //IDictionary<string, string> settings = await _context.Settings.ToDictionaryAsync(x => x.Key, x=>x.Value);
 
             List<BasketVM> basketVMs = null;
             string basket = HttpContext.Request.Cookies["basket"];
@@ -43,13 +43,13 @@ namespace Juan.ViewComponents
             }
             basket = JsonConvert.SerializeObject(basketVMs);
             HttpContext.Response.Cookies.Append("basket", basket);
-            //HeaderVM headerVMs = new HeaderVM()
-            //{
-            //    Settings = settings,
-            //    BasketVMs = basketVMs
-            //};
+            HeaderViewModel headerVM = new HeaderViewModel()
+            {
+                Settings = settings,
+                BasketVMs = basketVMs
+            };
 
-            return View(await Task.FromResult(basketVMs));
+            return View(await Task.FromResult(headerVM));
         }
     }
 }

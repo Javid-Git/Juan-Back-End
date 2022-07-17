@@ -1,4 +1,4 @@
-﻿
+﻿@model HeaderViewModel
 @{
     ViewData["Title"] = "Index";
 }
@@ -64,18 +64,17 @@
                     <div class="contact-info pt-0">
                         <h2 class="contact-title">contact us</h2>
                         <p>
-                            Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum
-                            est notare quam littera gothica, quam nunc putamus parum claram anteposuerit litterarum
-                            formas human.
+                            @Model.Settings.FirstOrDefault(s => s.Key == "ContactInfo").Value
                         </p>
                         <ul>
-                            <li><i class="fa fa-fax"></i> Address : No 40 Baria Sreet 133/2 NewYork City</li>
-                            <li><i class="fa fa-phone"></i> info@yourdomain.com</li>
-                            <li><i class="fa fa-envelope-o"></i> +88013245657</li>
+                            <li><i class="fa fa-fax"></i>@Model.Settings.FirstOrDefault(s => s.Key == "ContactAdress").Value</li>
+                            <li><i class="fa fa-phone"></i>@Model.Settings.FirstOrDefault(s => s.Key == "ContactPhone").Value</li>
+                            <li><i class="fa fa-envelope-o"></i>@Model.Settings.FirstOrDefault(s => s.Key == "ContactEmail").Value</li>
                         </ul>
                         <div class="working-time">
+                            WorkingHours
                             <h3>Working Hours</h3>
-                            <p class="pb-0"><span>Monday – Saturday:</span>08AM – 22PM</p>
+                            <p class="pb-0">@Model.Settings.FirstOrDefault(s => s.Key == "WorkingHours").Value</p>
                         </div>
                     </div>
                 </div>

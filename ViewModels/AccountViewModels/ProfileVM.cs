@@ -12,10 +12,9 @@ namespace Juan.ViewModels.AccountViewModels
 {
     public class ProfileVM
     {
+       
         [StringLength(255), Required]
-        public string Name { get; set; }
-        [StringLength(255), Required]
-        public string SurName { get; set; }
+        public string FullName { get; set; }
         [StringLength(255), Required]
         [EmailAddress]
         public string Email { get; set; }

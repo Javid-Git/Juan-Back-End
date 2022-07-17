@@ -19,21 +19,21 @@
                         <tbody>
                             @foreach (BasketVM product in Model)
                             {
-                            <tr>
+                                <tr>
 
-                                <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/@product.Image" alt="Product" /></a></td>
-                                <td class="pro-title"><a href="#">@product.Name</a></td>
-                                <td class="pro-price"><span>$@(product.Price)</span></td>
-                                <td class="pro-quantity">
-                                    <div class="pro-qty">
-                                        <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@product.ProdId" class="dec qtybtn subCount">-</a>
-                                        <input type="text" value="@product.SelectCount">
-                                        <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@product.ProdId" class="dec qtybtn addCount">+</a>
-                                    </div>
-                                </td>
-                                <td class="pro-subtotal"><span>$@((product.Price)*product.SelectCount)</span></td>
-                                <td class="pro-remove"><a class="deletefromcartbtn" asp-controller="basket" asp-action="DeleteFromCart" asp-route-id="@product.ProdId"><i class="fa fa-trash-o"></i></a></td>
-                            </tr>
+                                    <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/@product.Image" alt="Product" /></a></td>
+                                    <td class="pro-title"><a href="#">@product.Name</a></td>
+                                    <td class="pro-price"><span>$@(product.Price)</span></td>
+                                    <td class="pro-quantity">
+                                        <div class="pro-qty">
+                                            <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@product.ProdId" class="dec qtybtn subCount">-</a>
+                                            <input type="text" value="@product.SelectCount">
+                                            <a asp-controller="basket" asp-action="UpdateCount" asp-route-id="@product.ProdId" class="dec qtybtn addCount">+</a>
+                                        </div>
+                                    </td>
+                                    <td class="pro-subtotal"><span>$@((product.Price)*product.SelectCount)</span></td>
+                                    <td class="pro-remove"><a class="deletefromcartbtn" asp-controller="basket" asp-action="DeleteFromCart" asp-route-id="@product.ProdId"><i class="fa fa-trash-o"></i></a></td>
+                                </tr>
                             }
                             
                            
@@ -64,20 +64,24 @@
                             <table class="table">
                                 <tr>
                                     <td>Sub Total</td>
-                                    <td>$230</td>
+                                    <td>$@(Model.Sum(b=>b.SelectCount * b.Price) )</td>
                                 </tr>
                                 <tr>
                                     <td>Shipping</td>
-                                    <td>$70</td>
+                                    <td>$0</td>
+                                </tr>
+                                <tr class="total">
+                                    <td>VAT (20%)</td>
+                                    <td class="total-amount">$@(Model.Sum(p => p.Price * p.SelectCount) * 0.2)</td>
                                 </tr>
                                 <tr class="total">
                                     <td>Total</td>
-                                    <td class="total-amount">$300</td>
+                                    <td class="total-amount">$@(Model.Sum(b=>b.SelectCount * b.Price) + (Model.Sum(p => p.Price * p.SelectCount) * 0.2))</td>
                                 </tr>
                             </table>
                         </div>
                     </div>
-                    <a href="checkout.html" class="btn d-block">Proceed Checkout</a>
+                    <a asp-controller="order" asp-action="index" class="btn d-block">Proceed Checkout</a>
                 </div>
             </div>
         </div>

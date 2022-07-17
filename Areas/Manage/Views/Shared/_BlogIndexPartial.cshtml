@@ -1,0 +1,39 @@
+﻿@model PageNatedList<Blog>
+    <table class="table table-bordered table-striped ">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Text</th>
+                <th>Setting</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Blog blog in Model)
+            {
+                <tr>
+                    <td>@blog.Id</td>
+                    <td><img style=" width:250px; height:150px " src="~/assets/img/blog/@blog.Image" alt="Alternate Text" /></td>
+                    <td>@blog.Name</td>
+                    <td>@blog.Author</td>
+                    <td>@blog.Text</td>
+                    <td>
+                        <a asp-area="manage" asp-controller="blog" asp-action="update" asp-route-id="@blog.Id" class="btn btn-warning">Update</a>
+                        @if (blog.IsDeleted)
+                        {
+                            <a asp-area="manage" asp-controller="blog" asp-action="restore" asp-route-id="@blog.Id" asp-route-status="@ViewBag.Status" class="btn btn-info restoreBtn">Restore</a>
+
+                        }
+                        else
+                        {
+                            <a asp-area="manage" asp-controller="blog" asp-action="delete" asp-route-id="@blog.Id" asp-route-status="@ViewBag.Status" class="btn btn-danger deleteBtn">Delete</a>
+
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

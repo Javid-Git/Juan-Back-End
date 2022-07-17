@@ -146,24 +146,51 @@
                                                     <img src="~/assets/img/blog/comment-icon.png" alt="">
                                                 </div>
                                                 <div class="comment-body">
-                                                    <span class="reply-btn"><a href="#">Reply</a></span>
+                                                    <span class="reply-btn"><a asp-controller="blog" asp-action="AddReply" asp-route-id="@Model.Blog.Id" asp-route-comentId="@coment.Id" class="addreply">Reply</a></span>
                                                     <h5 class="comment-author">@Model.Users.FirstOrDefault(u => u.Id == coment.UserId).FullName</h5>
                                                     <div class="comment-post-date">
-                                                        @coment.Date.ToString("dd MMM, yyy" + "at"+ "HH:mm")
+                                                        @coment.Date.ToString("dd MMM, yyy" + "at" + "HH:mm")
                                                     </div>
                                                     <p>
                                                         @coment.Text
                                                     </p>
                                                 </div>
                                             </li>
+                                            foreach (ComentReply comentReply in Model.ComentReplies)
+                                            {
+                                                if (comentReply.ComentId == coment.Id)
+                                                {
+                                                    <li class="comment-children ">
+                                                        <div class="author-avatar">
+                                                            <img src="~/assets/img/blog/comment-icon.png" alt="">
+                                                        </div>
+                                                        <div class="comment-body">
+                                                          @*<span class="reply-btn"><a asp-controller="blog" asp-action="AddReply" asp-route-id="@Model.Blog.Id" asp-route-comentId="@coment.Id" class="addreply">Reply</a></span>*@
+                                                            <h5 class="comment-author">@Model.Users.FirstOrDefault(u => u.Id == comentReply.UserId).FullName</h5>
+                                                            <div class="comment-post-date">
+                                                                @comentReply.Date.ToString("dd MMM, yyy" + "at" + "HH:mm")
+                                                            </div>
+                                                            <p>
+                                                                @comentReply.Text
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                }
+                                            }
                                         }
+
                                     }
+                                    <li class="comment-children ">
+                                        <div class="blog-comment-wrapper replyContainer">
+
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                             <!-- comment area end -->
                             <!-- start blog comment box -->
                             <div class="blog-comment-wrapper">
-                                @await Html.PartialAsync("_ComentsPartial", Model)
+                                @await Html.PartialAsync("_BlogComentsPartial", Model)
                             </div>
                             <!-- start blog comment box -->
                         </div>

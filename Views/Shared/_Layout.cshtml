@@ -3,6 +3,9 @@
 
 @{
     List<BasketVM> basketVMs = await layoutService.GetBasket();
+    IDictionary<string, string> settings = await layoutService.GetSetting();
+    
+
 }
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
@@ -35,7 +38,7 @@
 
 <body>
 
-    @await Component.InvokeAsync("Header", basketVMs)
+    @await Component.InvokeAsync("Header", settings)
     <!-- off-canvas menu start -->
     <aside class="off-canvas-wrapper">
         <div class="off-canvas-overlay"></div>
@@ -141,7 +144,7 @@
         </div>
     </div>
     <!-- Quick view modal end -->
-    @await Component.InvokeAsync("Footer")
+    @await Component.InvokeAsync("Footer", settings)
 
     <!-- offcanvas search form start -->
     <div class="offcanvas-search-wrapper" style="overflow:hidden">

@@ -3,6 +3,7 @@ using Juan.Interfaces;
 using Juan.Models;
 using Juan.ViewModels.BasketViewModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -16,11 +17,13 @@ namespace Juan.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppDbContext _context;
-        public LayoutService(IHttpContextAccessor httpContextAccessor, AppDbContext context)
+        private readonly UserManager<AppUser> _userManager;
+
+        public LayoutService(IHttpContextAccessor httpContextAccessor, AppDbContext context, UserManager<AppUser> userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;
-
+            _userManager = userManager;
         }
 
         public async Task<List<BasketVM>> GetBasket()
@@ -37,7 +40,31 @@ namespace Juan.Services
                 basketVMs = new List<BasketVM>();
             }
 
+            if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+            {
+                AppUser appUser = await _userManager.Users.Include(u => u.Baskets).FirstOrDefaultAsync(u => u.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
 
+                if (appUser.Baskets != null && appUser.Baskets.Count() > 0)
+                {
+                    foreach (var item in appUser.Baskets)
+                    {
+                        if (!basketVMs.Any(b => b.ProdId == item.ProductId))
+                        {
+                            BasketVM basketVM = new BasketVM
+                            {
+                                ProdId = item.ProductId,
+                                SelectCount = item.Counts
+                            };
+
+                            basketVMs.Add(basketVM);
+                        }
+                    }
+
+                    basket = JsonConvert.SerializeObject(basketVMs);
+
+                    _httpContextAccessor.HttpContext.Response.Cookies.Append("basket", basket);
+                }
+            }
             foreach (BasketVM basketVM in basketVMs)
             {
                 Product dbproduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == basketVM.ProdId);
@@ -50,6 +77,12 @@ namespace Juan.Services
 
 
             return basketVMs;
+        }
+        public async Task<IDictionary<string, string>> GetSetting()
+        {
+            IDictionary<string, string> settings = await _context.Settings.ToDictionaryAsync(x => x.Key, x => x.Value);
+
+            return settings;
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿@model PageNatedList<AppUser>
+@{
+    int no = Model.ItemCount * (Model.Page - 1);
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>FullName</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Setting</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (AppUser appUser in Model)
+        {
+            no++;
+
+        <tr>
+            <td>@no</td>
+            <td>@appUser.FullName</td>
+            <td>User</td>
+            <td style="color:@(appUser.IsDeleted ? "red":"green")">@(appUser.IsDeleted ? "De Active":"Active")</td>
+            <td>
+                <a class="btn btn-warning" asp-area="manage" asp-controller="user" asp-action="update" asp-route-id="@appUser.Id">Update</a>
+                <a class="btn btn-warning" asp-area="manage" asp-controller="user" asp-action="resetpassword" asp-route-id="@appUser.Id">Reset Pasword</a>
+
+                @if (appUser.IsDeleted)
+                {
+        <a class="btn btn-primary restoreBtn" asp-area="manage" asp-controller="user" asp-action="Restore" asp-route-id="@appUser.Id" asp-route-status="@ViewBag.Status" asp-route-page="@Model.Page">Restore</a> }
+                        else
+                        {
+        <a class="btn btn-danger deleteBtn" asp-area="manage" asp-controller="user" asp-action="delete" asp-route-id="@appUser.Id" asp-route-status="@ViewBag.Status" asp-route-page="@Model.Page">Delete</a>                }
+            </td>
+        </tr>
+
+        }
+    </tbody>
+</table>

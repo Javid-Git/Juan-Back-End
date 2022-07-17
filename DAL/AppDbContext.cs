@@ -30,6 +30,9 @@ namespace Juan.DAL
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<ProductColorSize> ProductColorSizes { get; set; }
         public DbSet<Coment> Coments { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ComentReply> ComentReplies{ get; set; }
 
     }
 }

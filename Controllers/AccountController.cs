@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Juan.ViewModels.BasketViewModel;
 using Juan.DAL;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Controllers
 {
@@ -259,6 +261,85 @@ namespace Juan.Controllers
             }
             return View();
         }
+        public async Task<IActionResult> Profile()
+        {
+            AppUser appUser = await _userManager.Users
+                .Include(u => u.Orders).ThenInclude(o => o.OrderItems).ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
 
+            if (appUser == null) return NotFound();
+
+            ProfileVM profileVM = new ProfileVM
+            {
+                FullName = appUser.FullName,
+                Email = appUser.Email,
+                UserName = appUser.UserName
+            };
+
+            MemberVM memberVM = new MemberVM
+            {
+                ProfileVM = profileVM,
+                Orders = appUser.Orders
+            };
+
+            return View(memberVM);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> Update(ProfileVM profileVM)
+        {
+            if (!ModelState.IsValid) return View("Profile", profileVM);
+
+            AppUser dbAppUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (dbAppUser.NormalizedUserName != profileVM.UserName.Trim().ToUpperInvariant() ||
+                dbAppUser.FullName.ToUpperInvariant() != profileVM.FullName.Trim().ToUpperInvariant() ||
+                dbAppUser.NormalizedEmail != profileVM.Email.Trim().ToUpperInvariant())
+            {
+                dbAppUser.FullName = profileVM.FullName;
+                dbAppUser.Email = profileVM.Email;
+                dbAppUser.UserName = profileVM.UserName;
+
+                IdentityResult identityResult = await _userManager.UpdateAsync(dbAppUser);
+
+                if (!identityResult.Succeeded)
+                {
+                    foreach (var item in identityResult.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+
+                    return View("Profile", profileVM);
+                }
+
+                TempData["success"] = "Pr0fil Ugurla Yenilendi";
+            }
+
+            if (profileVM.CurrentPassword != null && profileVM.NewPassword != null)
+            {
+                if (await _userManager.CheckPasswordAsync(dbAppUser, profileVM.CurrentPassword) && profileVM.CurrentPassword == profileVM.NewPassword)
+                {
+                    ModelState.AddModelError("", "New Password Is The Same Current Password");
+                    return View("Profile", profileVM);
+                }
+
+                IdentityResult identityResult = await _userManager.ChangePasswordAsync(dbAppUser, profileVM.CurrentPassword, profileVM.NewPassword);
+
+                if (!identityResult.Succeeded)
+                {
+                    foreach (var item in identityResult.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+
+                    return View("Profile", profileVM);
+                }
+
+                TempData["successPassword"] = "Sifre Ugurla Yenilendi";
+            }
+
+            return RedirectToAction("Profile");
+        }
     }
 }

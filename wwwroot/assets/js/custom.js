@@ -1,4 +1,13 @@
 ﻿$(document).ready(function () {
+    $(document).on('click', '.addreply', function (e) {
+        e.preventDefault();
+
+        fetch($(this).attr('href'))
+            .then(res => res.text())
+            .then(data => {
+                $('.replyContainer').append(data)
+            })
+    })
     $(document).on('click', '.modaldetail', function (e) {
         e.preventDefault();
         let url = $(this).attr('href');
@@ -182,6 +191,11 @@
                             });
                     });
             })
+    })
+    $(document).on('show.bs.collapse', '.accordian-body', function () {
+        $(this).closest("table")
+            .find(".collapse.in")
+            .not(this)
     })
 
     //$(document).on('click', '#addtobasket', function (e) {

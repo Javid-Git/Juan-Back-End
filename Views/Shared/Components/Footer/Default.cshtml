@@ -1,4 +1,5 @@
-﻿<!-- Start Footer Area Wrapper -->
+﻿@model HeaderViewModel
+<!-- Start Footer Area Wrapper -->
 <footer class="footer-wrapper">
     <!-- footer main area start -->
     <div class="footer-widget-area section-padding">
@@ -10,9 +11,9 @@
                         <h5 class="widget-title">My Account</h5>
                         <div class="widget-body">
                             <ul class="location-wrap">
-                                <li><i class="ion-ios-location-outline"></i>184 Main Rd E, St Albans VIC 3021, Australia</li>
-                                <li><i class="ion-ios-email-outline"></i>Mail Us: <a href="mailto:yourmail@gmail.com">yourmail@gmail.com</a></li>
-                                <li><i class="ion-ios-telephone-outline"></i>Phone: <a href="%2b0025425456554">+ 00 254 254565</a></li>
+                                <li><i class="ion-ios-location-outline"></i>@Model.Settings.FirstOrDefault(s => s.Key == "Location").Value</li>
+                                <li><i class="ion-ios-email-outline"></i>@Model.Settings.FirstOrDefault(s => s.Key == "Email").Value</a></li>
+                                <li><i class="ion-ios-telephone-outline"></i>@Model.Settings.FirstOrDefault(s => s.Key == "Phone").Value</a></li>
                             </ul>
                         </div>
                     </div>

@@ -1,0 +1,46 @@
+﻿@model Blog
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<div class="row d-flex justify-content-center">
+    <div class="col-lg-8">
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" id="name">
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Author" class="form-label"></label>
+                <input asp-for="Author" class="form-control" id="age">
+            </div>
+            <div class="mb-3">
+                <label asp-for="Text" class="form-label"></label>
+                <input asp-for="Text" class="form-control" id="age">
+                <span class="text-danger" asp-validation-for="Text"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="FormImage" class="form-label ">Main Image</label>
+                <input asp-for="FormImage" class="form-control ">
+                <span class="text-danger" asp-validation-for="FormImage"></span>
+            </div>
+            <div class="form-group parentfield">
+                <label asp-for="CategoryId">Category</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="new SelectList(ViewBag.BlCategories, nameof(Category.Id), nameof(Category.Name))">
+                </select>
+                <span class="text-danger" asp-validation-for="CategoryId"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TagIds"></label>
+                <select asp-for="TagIds" class="form-control" asp-items="new SelectList(ViewBag.Tags, nameof(Tag.Id),nameof(Tag.Name))">
+                </select>
+                <span class="text text-danger" asp-validation-for="TagIds"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>

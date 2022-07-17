@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Juan.Areas.Manage.Controllers
 {
     [Area("Manage")]
-    //[Authorize(Roles = "SuperAdmin,Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
 
     public class HomeController : Controller
     {

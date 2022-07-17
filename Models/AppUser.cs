@@ -20,6 +20,8 @@ namespace Juan.Models
         public Nullable<DateTime> UpdatedAt { get; set; }
         public List<Basket> Baskets { get; set; }
         public List<Coment> Coments { get; set; }
+        public IEnumerable<Order> Orders { get; set; }
+
 
 
     }

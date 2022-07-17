@@ -16,8 +16,10 @@ namespace Juan.ViewModels.BlogViewModels
         public List<BlogBlCategory> BlogBlCategories{ get; set; }
         public List<Coment> Coments{ get; set; }
         public Coment Coment{ get; set; }
+        public List<ComentReply> ComentReplies{ get; set; }
         public AppUser User{ get; set; }
         public List<AppUser> Users{ get; set; }
+        public Nullable<int> PostComentId{ get; set; }
 
     }
 }

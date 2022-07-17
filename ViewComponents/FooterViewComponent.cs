@@ -8,9 +8,10 @@ namespace Juan.ViewComponents
 {
     public class FooterViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(IDictionary<string, string> settings)
         {
-            return View();
+
+            return View(await Task.FromResult(settings));
         }
     }
 }

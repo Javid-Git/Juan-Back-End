@@ -2,6 +2,7 @@
 using Juan.Models;
 using Juan.ViewModels;
 using Juan.ViewModels.BasketViewModel;
+using Juan.ViewModels.HeaderViewModels;
 using Juan.ViewModels.ModalViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,9 @@ namespace Juan.Controllers
         {
             List<Product> products = await _context.Products.ToListAsync();
             string basket = HttpContext.Request.Cookies["basket"];
+            List<Setting> settings = await _context.Settings.ToListAsync();
             List<BasketVM> basketVMs = null;
-
+           
             if (!string.IsNullOrWhiteSpace(basket))
             {
                 basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
