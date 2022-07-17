@@ -19,8 +19,9 @@ namespace Juan.ViewComponents
         {
             _context = context;
         }
-        public async Task<IViewComponentResult> InvokeAsync(IDictionary<string, string> settings)
+        public async Task<IViewComponentResult> InvokeAsync(/*IDictionary<string, string> settings*/)
         {
+            IDictionary<string, string> settings = await _context.Settings.ToDictionaryAsync(x => x.Key, s => s.Value);
 
             List<BasketVM> basketVMs = null;
             string basket = HttpContext.Request.Cookies["basket"];

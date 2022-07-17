@@ -1,4 +1,4 @@
-﻿@model HeaderViewModel
+﻿@model IDictionary<string, string>
 <!-- Start Footer Area Wrapper -->
 <footer class="footer-wrapper">
     <!-- footer main area start -->
@@ -11,9 +11,9 @@
                         <h5 class="widget-title">My Account</h5>
                         <div class="widget-body">
                             <ul class="location-wrap">
-                                <li><i class="ion-ios-location-outline"></i>@Model.Settings.FirstOrDefault(s => s.Key == "Location").Value</li>
-                                <li><i class="ion-ios-email-outline"></i>@Model.Settings.FirstOrDefault(s => s.Key == "Email").Value</a></li>
-                                <li><i class="ion-ios-telephone-outline"></i>@Model.Settings.FirstOrDefault(s => s.Key == "Phone").Value</a></li>
+                                <li><i class="ion-ios-location-outline"></i>@Model.FirstOrDefault(s => s.Key == "Location").Value</li>
+                                <li><i class="ion-ios-email-outline"></i>@Model.FirstOrDefault(s => s.Key == "Email").Value</a></li>
+                                <li><i class="ion-ios-telephone-outline"></i>@Model.FirstOrDefault(s => s.Key == "Phone").Value</a></li>
                             </ul>
                         </div>
                     </div>

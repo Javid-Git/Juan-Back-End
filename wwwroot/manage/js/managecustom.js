@@ -71,25 +71,41 @@ $(document).ready(function () {
 
     })
 
-    //$(document).on('change', '.ismainbtn', function () {
-    //    console.log($(this).is(":checked"))
-    //    if ($(this).is(":checked")) {
-    //        $('.imgfield').removeClass('d-none')
-    //        $('.parentfield').addClass('d-none')
-    //    }
-    //    else {
-    //        $('.imgfield').addClass('d-none')
-    //        $('.parentfield').removeClass('d-none')
-    //    }
-    //})
-    //if ($('.ismainbtn').is(":checked")) {
-    //    $('.imgfield').removeClass('d-none')
-    //    $('.parentfield').addClass('d-none')
-    //}
-    //else {
-    //    $('.imgfield').addClass('d-none')
-    //    $('.parentfield').removeClass('d-none')
-    //}
+    $(document).on('click', '.Updatebtn', function (e) {
+        e.preventDefault();
+        console.log("test");
+        $(this).parent().addClass('d-none');
+        $(this).parent().next().removeClass('d-none');
+    })
+
+    $(document).on('click', '.settingUpdatebtn', function (e) {
+        e.preventDefault();
+
+        let url = $('.updateForm').attr('action');
+
+        let key = $(this).prev().attr('name');
+        let value = $(this).prev().val();
+        console.log(key)
+        console.log(value)
+
+        let bodyObj = {
+            key: key,
+            value: value
+        }
+
+        fetch(url, {
+            method: 'Post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(bodyObj)
+        })
+            .then(res => res.text())
+            .then(data => {
+                $('.settingContainer').html(data)
+            })
+    })
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -111,4 +127,6 @@ $(document).ready(function () {
     if ($('#successInput').val().length) {
         toastr["success"]($('#successInput').val(), $('#successInput').val().split(' ')[0])
     }
+
+    
 })

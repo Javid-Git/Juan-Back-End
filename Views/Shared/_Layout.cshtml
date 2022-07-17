@@ -38,7 +38,7 @@
 
 <body>
 
-    @await Component.InvokeAsync("Header", settings)
+    @await Component.InvokeAsync("Header")
     <!-- off-canvas menu start -->
     <aside class="off-canvas-wrapper">
         <div class="off-canvas-overlay"></div>
@@ -144,7 +144,7 @@
         </div>
     </div>
     <!-- Quick view modal end -->
-    @await Component.InvokeAsync("Footer", settings)
+    @await Component.InvokeAsync("Footer")
 
     <!-- offcanvas search form start -->
     <div class="offcanvas-search-wrapper" style="overflow:hidden">
